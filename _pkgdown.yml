@@ -1,4 +1,7 @@
-url: ~
+url: https://enram.github.io/getRad
+
 template:
   bootstrap: 5
 
+navbar:
+  bg: dark
