@@ -1,0 +1,45 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "getRad" in publications use:'
+type: software
+license: MIT
+title: 'getRad: Access and Standardize Radar Data'
+version: 0.0.0.9000
+abstract: What the package does (one paragraph).
+authors:
+- family-names: Kranstauber
+  given-names: Bart
+  email: b.kranstauber@uva.nl
+  orcid: https://orcid.org/0000-0001-8303-780X
+  affiliation: University of Amsterdam
+- family-names: Desmet
+  given-names: Peter
+  email: peter.desmet@inbo.be
+  orcid: https://orcid.org/0000-0002-8442-8025
+  affiliation: Research Institute for Nature and Forest (INBO)
+repository-code: https://github.com/enram/getRad
+url: https://enram.github.io/getRad/
+contact:
+- family-names: Kranstauber
+  given-names: Bart
+  email: b.kranstauber@uva.nl
+  orcid: https://orcid.org/0000-0001-8303-780X
+  affiliation: University of Amsterdam
+references:
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2024'
+  version: '>= 3.0.0'
+
