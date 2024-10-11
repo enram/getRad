@@ -16,8 +16,10 @@ knitr::opts_chunk$set(
 # getRad
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org/package=getRad)
 [![R-CMD-check](https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml)
-[![test-coverage](https://github.com/enram/getRad/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/enram/getRad/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/gh/enram/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/enram/getRad/)
+[![repo status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
 The goal of getRad is to ...
