@@ -1,0 +1,64 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "getRad",
+  "description": "What the package does (one paragraph).",
+  "name": "getRad: Access and Standardize Radar Data",
+  "relatedLink": "https://enram.github.io/getRad/",
+  "codeRepository": "https://github.com/enram/getRad",
+  "issueTracker": "https://github.com/enram/getRad/issues",
+  "license": "https://spdx.org/licenses/MIT",
+  "version": "0.0.0.9000",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.2.3 (2023-03-15)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Bart",
+      "familyName": "Kranstauber",
+      "email": "b.kranstauber@uva.nl",
+      "@id": "https://orcid.org/0000-0001-8303-780X"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Peter",
+      "familyName": "Desmet",
+      "email": "peter.desmet@inbo.be",
+      "@id": "https://orcid.org/0000-0002-8442-8025"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Bart",
+      "familyName": "Kranstauber",
+      "email": "b.kranstauber@uva.nl",
+      "@id": "https://orcid.org/0000-0001-8303-780X"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    }
+  ],
+  "softwareRequirements": {
+    "SystemRequirements": null
+  },
+  "fileSize": "2.744KB",
+  "readme": "https://github.com/enram/getRad/blob/main/README.md",
+  "contIntegration": ["https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml", "https://github.com/enram/getRad/actions/workflows/test-coverage.yaml"]
+}
