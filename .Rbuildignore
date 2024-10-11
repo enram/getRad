@@ -5,3 +5,6 @@
 ^README\.Rmd$
 ^codemeta\.json$
 ^CITATION\.cff$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
