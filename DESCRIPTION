@@ -1,14 +1,19 @@
 Package: getRad
-Title: What the Package Does (One Line, Title Case)
+Title: Access and Standardize Radar Data
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: c(
+    person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),
+    person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "aut"),
+           comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
+  )
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
+URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
+BugReports: https://github.com/enram/getRad/issues
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
