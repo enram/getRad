@@ -21,7 +21,7 @@ You can install the development version of getRad from
 devtools::install_github("enram/getRad")
 ```
 
-## Example
+## Usage
 
 This is a basic example which shows you how to solve a common problem:
 
@@ -30,26 +30,15 @@ library(getRad)
 ## basic example code
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+## Meta
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+- We welcome
+  [contributions](https://enram.github.io/getRad/CONTRIBUTING.html)
+  including bug reports.
+- License: MIT
+- Get [citation
+  information](https://enram.github.io/getRad/authors.html#citation) for
+  getRad in R doing `citation("getRad")`.
+- Please note that this project is released with a [Contributor Code of
+  Conduct](https://enram.github.io/getRad/CODE_OF_CONDUCT.html). By
+  participating in this project you agree to abide by its terms.
