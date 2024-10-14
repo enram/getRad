@@ -7,15 +7,21 @@ Authors@R: c(
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "aut"),
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
   )
-Description: What the package does (one paragraph).
+Description: This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume data from open repositories of European countries.
 License: MIT + file LICENSE
 URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
 BugReports: https://github.com/enram/getRad/issues
 Suggests:
     askpass,
+    htmltools,
     keyring,
+    knitr,
+    leaflet,
     lubridate,
     rhdf5,
+    rnaturalearth,
+    rnaturalearthdata,
+    sf,
     testthat (>= 3.0.0),
     tidyr,
     withr,

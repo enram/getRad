@@ -33,7 +33,7 @@ included_countries <- dplyr::tribble(
 ) |>
   dplyr::left_join(
 
-    rnaturalearth::ne_countries(50) |> dplyr::mutate(key_lower = tolower(iso_a2_eh)),
+    rnaturalearth::ne_countries("medium") |> dplyr::mutate(key_lower = tolower(iso_a2_eh)),
     by = c(code = "key_lower")
   ) |>
   sf::st_as_sf() |> dplyr::rowwise() |>dplyr::mutate(supported=factor(supported),links_html=dplyr::if_else(length(links)==0,'',paste("<p><strong>Links: </strong><ul>",paste0("<li><a href='",links,"'>",names(links),"</a></li>", collapse = ""),"</ul></p>")))
