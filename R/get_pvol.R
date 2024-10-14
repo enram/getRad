@@ -12,12 +12,14 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
 #' get_pvol("czska", as.POSIXct(Sys.Date()))
 #' get_pvol(
 #'   c("deess", "dehnr", "fianj", "czska"),
 #'   as.POSIXct(Sys.Date())
 #' )
+#' }
 get_pvol <- function(radar = NULL, time, ...) {
   if (is.null(radar) || !is_character(radar) || !all(nchar(radar)== 5)) {
     cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes",
