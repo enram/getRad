@@ -1,6 +1,7 @@
 #' @export
 #' @rdname secret
 get_secret <- function(name) {
+  rlang::check_installed("keyring","to manage secrets in getRad")
   if (!is_scalar_character(name)) {
     cli_abort("{.arg name} should be a scalar character",
                                             class="getRad_error_get_secret_no_scalar_character")}
@@ -32,6 +33,7 @@ get_secret <- function(name) {
 #' @export
 
 set_secret <- function(name, secret = NULL) {
+  rlang::check_installed("keyring","to manage secrets in getRad")
   if (!is_scalar_character(name)) {
     cli_abort("{.arg name} should be a scalar character",
               class="getRad_error_set_secret_no_scalar_character")}
