@@ -16,6 +16,6 @@
 #' @importFrom httr2 req_retry
 #' @importFrom httr2 resp_status
 #' @importFrom cli cli_abort cli_inform
-#' @importFrom rlang is_scalar_character
+#' @importFrom rlang is_scalar_character is_character
 ## usethis namespace: end
 NULL

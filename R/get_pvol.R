@@ -1,0 +1,58 @@
+#' Retrieve polar volumes
+#'
+#' @param radar The name of the radar as a scalar character string.
+#' @param time The time as a `POSIXct` for the polar volume to download
+#' @param ... Additional arguments passed on tho the individual reading functions, for example `param="all"` to the bioRad::read_pvolfile function.
+#'
+#' @details
+#'
+#' For more details on specific countries please see the vignettes
+#'
+#' @return Either a polar volume or a list of polar volumes
+#' @export
+#'
+#' @examples
+#' get_pvol("dkbor", as.POSIXct(as.Date("2024-4-4")), param = "all")
+#' get_pvol("fiuta", as.POSIXct(as.Date("2024-4-4")), param = "all")
+#' options(getRad.nl_converter = "~/nl-birdmap-live/tools/KNMI_vol_h5_to_ODIM_h5")
+#' get_pvol("nlhrw", as.POSIXct(as.Date("2024-4-4")), param = "all")
+#' get_pvol("eehar", as.POSIXct(as.Date("2024-4-4")), param = "all")
+#' get_pvol("deess", as.POSIXct(Sys.Date()))
+#' get_pvol("czska", as.POSIXct(Sys.Date()))
+#' get_pvol(
+#'   c("deess", "dehnr", "fianj", "dkbor", "nldhl", "czska"),
+#'   as.POSIXct(Sys.Date())
+#' )
+get_pvol <- function(radar = NULL, time, ...) {
+  if (is.null(radar) || !is_character(radar) || !all(nchar(radar)== 5)) {
+    cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes",
+              class = "getRad_error_radar_not_character"
+    )
+  }
+  if (length(radar) != 1) {
+    return(purrr::map(radar, get_pvol, time = time, ...))
+  }
+
+  fn <- select_get_pvol_function(radar)
+  get(fn)(radar, time, ...)
+}
+
+
+# Helper function to find the function for a specific radar
+select_get_pvol_function <- function(radar) {
+  cntry_code <- substr(radar, 1, 2)
+  fun <- (dplyr::case_when(
+    cntry_code == "nl" ~ "get_pvol_nl",
+    cntry_code == "fi" ~ "get_pvol_fi",
+    cntry_code == "dk" ~ "get_pvol_dk",
+    cntry_code == "de" ~ "get_pvol_de",
+    cntry_code == "ee" ~ "get_pvol_ee",
+    cntry_code == "cz" ~ "get_pvol_cz",
+    .default = NA
+  ))
+  if (rlang::is_na(fun)) {
+    cli_abort("No suitable function exist downloading from the radar {radar}",
+              class="getRad_error_no_function_for_radar_with_country_code")
+  }
+  return(fun)
+}
