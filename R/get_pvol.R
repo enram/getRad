@@ -12,15 +12,10 @@
 #' @export
 #'
 #' @examples
-#' get_pvol("dkbor", as.POSIXct(as.Date("2024-4-4")), param = "all")
-#' get_pvol("fiuta", as.POSIXct(as.Date("2024-4-4")), param = "all")
-#' options(getRad.nl_converter = "~/nl-birdmap-live/tools/KNMI_vol_h5_to_ODIM_h5")
-#' get_pvol("nlhrw", as.POSIXct(as.Date("2024-4-4")), param = "all")
-#' get_pvol("eehar", as.POSIXct(as.Date("2024-4-4")), param = "all")
 #' get_pvol("deess", as.POSIXct(Sys.Date()))
 #' get_pvol("czska", as.POSIXct(Sys.Date()))
 #' get_pvol(
-#'   c("deess", "dehnr", "fianj", "dkbor", "nldhl", "czska"),
+#'   c("deess", "dehnr", "fianj", "czska"),
 #'   as.POSIXct(Sys.Date())
 #' )
 get_pvol <- function(radar = NULL, time, ...) {

@@ -14,8 +14,10 @@ BugReports: https://github.com/enram/getRad/issues
 Suggests:
     askpass,
     keyring,
+    lubridate,
     rhdf5,
     testthat (>= 3.0.0),
+    tidyr,
     withr,
     xml2
 Config/testthat/edition: 3
