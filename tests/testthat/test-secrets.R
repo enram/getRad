@@ -1,7 +1,9 @@
 test_that("get_secret fails correctly", {
-  expect_error(get_secret(c("unknown_secret", "unknown_secret2")), class = "getRad_error_get_secret_no_scalar_character")
-  expect_error(get_secret(1L), class = "getRad_error_get_secret_no_scalar_character")
-  expect_error(get_secret("unknown_secret"), class = "getRad_error_secret_not_found")
+  withr::with_options(list(keyring_backend = "env"), {
+    expect_error(get_secret(c("unknown_secret", "unknown_secret2")), class = "getRad_error_get_secret_no_scalar_character")
+    expect_error(get_secret(1L), class = "getRad_error_get_secret_no_scalar_character")
+    expect_error(get_secret("unknown_secret"), class = "getRad_error_secret_not_found")
+  })
 })
 
 test_that("set_secret fails correctly", {
