@@ -32,3 +32,4 @@ Imports:
     httr2,
     purrr,
     rlang
+VignetteBuilder: knitr

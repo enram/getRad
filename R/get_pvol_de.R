@@ -1,4 +1,5 @@
 get_pvol_de <- function(radar, time, ...) {
+  time_pos<-base<-iter<-param<-resp<-time_chr<-NULL
   # https://opendata.dwd.de/weather/radar/sites
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_00-2024061011155700-hnr-10339-hd5
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_09-2024061206040300-hnr-10339-hd5
@@ -41,7 +42,8 @@ get_pvol_de <- function(radar, time, ...) {
     req_perform_parallel(paths = replicate(length(files_to_get$req), tempfile(fileext = ".h5")))
   files_to_get |>
     dplyr::mutate(
-      tempfile = purrr::map_chr(resp, ~ .x$body),
+      tempfile = purrr::map_chr(resp, ~ .x$body)) |>
+    dplyr::mutate(
       scan = purrr::map(tempfile, ~ read_scan(.x)),
       remove = purrr::map(tempfile, ~ file.remove(.x))
     ) |>
@@ -83,7 +85,6 @@ list_to_scan <- function(x, p) {
   xx
 }
 
-# TODO are these copied from biorad?
 read_scan <- function(file, scan = "dataset1", param = "all", radar = "", datetime = "", geo = list(), attributes = "") {
   rlang::check_installed("rhdf5")
   h5struct <- rhdf5::h5ls(file, all = TRUE)
