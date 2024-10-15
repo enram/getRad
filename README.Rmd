@@ -22,24 +22,33 @@ knitr::opts_chunk$set(
 [![repo status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
-The goal of getRad is to ...
+The goal of `getRad` is to provide a unified interface to radar data for biological research. This is done by downloading data from repositories and loading it directly into R. Currently the functionality if focused around volume data from weather radars. However in the longer term it might also support vertical profile information, vertically integrated profile information and possibly data from other radars. 
 
 ## Installation
 
-You can install the development version of getRad from [GitHub](https://github.com/) with:
+You can install the development version of `getRad` from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("enram/getRad")
 ```
 
+For the time being the package is not yet released on CRAN.
+
 ## Usage
 
-This is a basic example which shows you how to solve a common problem:
+Here are some examples of volume data with biological information that can be downloaded.
 
 ```{r example}
 library(getRad)
-## basic example code
+library(bioRad)
+# Plot insect movements in Finland (Mäkinen et al. 2022)
+pvol<-get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz="UTC"))
+plot(project_as_ppi(get_scan(pvol,0), range_max = 75000))
+
+# Spring migration in Estonia
+pvol<-get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz="UTC+1"))
+plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ```
 
 ## Meta
