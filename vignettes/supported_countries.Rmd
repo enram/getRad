@@ -29,7 +29,7 @@ included_countries <- dplyr::tribble(
   "dk", "An API key is needed to download the data. Furtheremore in some cases the RHOHV parameter does not seem to reach 1.", "Only the last 6 months", "Readable",NA, c("Data description"="https://opendatadocs.dmi.govcloud.dk/Data/Radar_Data","API description"="https://opendatadocs.dmi.govcloud.dk/en/APIs/Radar_Data_API","Getting a API key"="https://opendatadocs.dmi.govcloud.dk/en/Authentication"),
   "de", "Data is downloaded from the unfiltered repository. Polar volumes are reconstructed from separate parameters", "Only the last three days", "Readable",NA, c("Data documentation"="https://www.dwd.de/EN/ourservices/radar_products/radar_products.html"),
   "cz", "Polar volumes are reconstructed from parameter specific polar volumes", "The last three days are available", "Readable",NA, c('Data description'='https://opendata.chmi.cz/meteorology/weather/radar/radar_description_en.pdf'),
-  "ee", "No special remarks", NA, "Readable",NA, c("Data"="https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
+  "ee", "The repository seems to implement quite strict rate limiting therefore retries are implemented. However the http error 429 is still frequently returned.", NA, "Readable",NA, c("Data"="https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
 ) |>
   dplyr::left_join(
 
@@ -77,3 +77,6 @@ browsable(
   ))
 )
 ```
+
+
+For an overview of radars per country you can visit either the [aloft](https://aloftdata.eu/radars/) or [opera](https://www.eumetnet.eu/wp-content/themes/aeron-child/observations-programme/current-activities/opera/database/OPERA_Database/index.html) site.
