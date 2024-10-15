@@ -3,7 +3,7 @@
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
-    getRad.user_agent = "R package getRad"
+    getRad.user_agent = paste("R package getRad",getNamespaceVersion("getRad"))
   )
   toset <- !(names(op.getRad) %in% names(op))
   if (any(toset)) options(op.getRad[toset])
