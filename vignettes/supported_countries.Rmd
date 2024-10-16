@@ -21,36 +21,39 @@ require(leaflet)
 require(rnaturalearth)
 included_countries <- dplyr::tribble(
   ~code, ~description, ~time, ~supported, ~license, ~links,
-  "be","Data is suggested to be opened into the future, it is however not yet accessible.",NA,"Information",NA,c("More info"="https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_JABBEKE_VOLUME"),
-  "pl","Volume data should be open according to a presentation by <a href='https://poster.easyabstract.it/ERAD2024/abstract/15550/161/884'>Groenemeijer et al</a> at erad2024. However no link is known by the authors of the package up to now.",NA,"Information",NA, list(),
-  "fr", "Currently we have not implemented reading the bufr format", NA, "Not implemented",NA, list(),
-  "nl", "For reading a special piece of converter software needs to be available. Furthermore for large datasets it might be advantagious to create a personal API key.", NA, "Readable","CC BY 4.0<sup> <a href='https://dataplatform.knmi.nl/dataset/radar-volume-full-herwijnen-1-0'>1</a>, <a href='https://dataplatform.knmi.nl/dataset/radar-volume-denhelder-2-0'>2</a></sup>", list(),
-  "fi", "Data are downloaded from an open S3 bucket. Only a small correction to the `hdf5` file is needed to read the files.", NA, "Readable","CC BY 4.0<sup> <a href='https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3'>1</a></sup>", c('Data Documentation'='https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3'),
-  "dk", "An API key is needed to download the data. Furtheremore in some cases the RHOHV parameter does not seem to reach 1.", "Only the last 6 months", "Readable",NA, c("Data description"="https://opendatadocs.dmi.govcloud.dk/Data/Radar_Data","API description"="https://opendatadocs.dmi.govcloud.dk/en/APIs/Radar_Data_API","Getting a API key"="https://opendatadocs.dmi.govcloud.dk/en/Authentication"),
-  "de", "Data is downloaded from the unfiltered repository. Polar volumes are reconstructed from separate parameters", "Only the last three days", "Readable",NA, c("Data documentation"="https://www.dwd.de/EN/ourservices/radar_products/radar_products.html"),
-  "cz", "Polar volumes are reconstructed from parameter specific polar volumes", "The last three days are available", "Readable",NA, c('Data description'='https://opendata.chmi.cz/meteorology/weather/radar/radar_description_en.pdf'),
-  "ee", "The repository seems to implement quite strict rate limiting therefore retries are implemented. However the http error 429 is still frequently returned.", NA, "Readable",NA, c("Data"="https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
+  "be", "Data is suggested to be opened into the future, it is however not yet accessible.", NA, "Information", NA, c("More info" = "https://opendata.meteo.be/geonetwork/srv/eng/catalog.search#/metadata/RMI_DATASET_JABBEKE_VOLUME"),
+  "pl", "Volume data should be open according to a presentation by <a href='https://poster.easyabstract.it/ERAD2024/abstract/15550/161/884'>Groenemeijer et al</a> at erad2024. However no link is known by the authors of the package up to now.", NA, "Information", NA, list(),
+  "fr", "Currently we have not implemented reading the bufr format", NA, "Not implemented", NA, list(),
+  "nl", "For reading a special piece of converter software needs to be available. Furthermore for large datasets it might be advantagious to create a personal API key.", NA, "Readable", "CC BY 4.0<sup> <a href='https://dataplatform.knmi.nl/dataset/radar-volume-full-herwijnen-1-0'>1</a>, <a href='https://dataplatform.knmi.nl/dataset/radar-volume-denhelder-2-0'>2</a></sup>", list(),
+  "fi", "Data are downloaded from an open S3 bucket. Only a small correction to the `hdf5` file is needed to read the files.", NA, "Readable", "CC BY 4.0<sup> <a href='https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3'>1</a></sup>", c("Data Documentation" = "https://en.ilmatieteenlaitos.fi/radar-data-on-aws-s3"),
+  "dk", "An API key is needed to download the data. Furtheremore in some cases the RHOHV parameter does not seem to reach 1.", "Only the last 6 months", "Readable", NA, c("Data description" = "https://opendatadocs.dmi.govcloud.dk/Data/Radar_Data", "API description" = "https://opendatadocs.dmi.govcloud.dk/en/APIs/Radar_Data_API", "Getting a API key" = "https://opendatadocs.dmi.govcloud.dk/en/Authentication"),
+  "de", "Data is downloaded from the unfiltered repository. Polar volumes are reconstructed from separate parameters", "Only the last three days", "Readable", NA, c("Data documentation" = "https://www.dwd.de/EN/ourservices/radar_products/radar_products.html"),
+  "cz", "Polar volumes are reconstructed from parameter specific polar volumes", "The last three days are available", "Readable", NA, c("Data description" = "https://opendata.chmi.cz/meteorology/weather/radar/radar_description_en.pdf"),
+  "ee", "The repository seems to implement quite strict rate limiting therefore retries are implemented. However the http error 429 is still frequently returned.", NA, "Readable", NA, c("Data" = "https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
 ) |>
   dplyr::left_join(
 
     rnaturalearth::ne_countries("medium") |> dplyr::mutate(key_lower = tolower(iso_a2_eh)),
     by = c(code = "key_lower")
   ) |>
-  sf::st_as_sf() |> dplyr::rowwise() |>dplyr::mutate(supported=factor(supported),links_html=dplyr::if_else(length(links)==0,'',paste("<p><strong>Links: </strong><ul>",paste0("<li><a href='",links,"'>",names(links),"</a></li>", collapse = ""),"</ul></p>")))
+  sf::st_as_sf() |>
+  dplyr::rowwise() |>
+  dplyr::mutate(supported = factor(supported), links_html = dplyr::if_else(length(links) == 0, "", paste("<p><strong>Links: </strong><ul>", paste0("<li><a href='", links, "'>", names(links), "</a></li>", collapse = ""), "</ul></p>")))
 
 stopifnot(!any(is.na(included_countries$name)))
-pal <- colorFactor("plasma", levels =unique(included_countries$supported) )
+pal <- colorFactor("plasma", levels = unique(included_countries$supported))
 labels <- glue::glue(
   "<h5>{included_countries$name}</h5><br/>
   <p>{included_countries$description}</p>
   {dplyr::if_else(!is.na(included_countries$time),paste('<p><strong>Temporal restrictions:</strong>',included_countries$time,'</p>'),'')}
   {dplyr::if_else(!is.na(included_countries$license),paste('<p><strong>License:</strong>',included_countries$license,'</p>'),'')}
   {included_countries$links_html}",
-  ) %>% lapply(htmltools::HTML)
-leaf<-leaflet(width = "100%") |>
+) %>% lapply(htmltools::HTML)
+leaf <- leaflet(width = "100%") |>
   addTiles() |>
-  addPolygons(opacity = 1,
-    data = included_countries, color="white",weight = 3,
+  addPolygons(
+    opacity = 1,
+    data = included_countries, color = "white", weight = 3,
     highlightOptions = highlightOptions(
       weight = 5,
       color = "#666",
@@ -59,12 +62,15 @@ leaf<-leaflet(width = "100%") |>
     popup = labels,
     # labelOptions = labelOptions(
     #   style = list("font-weight" = "normal", padding = "3px 8px", width="250px",    "white-space"="normal"),
-    #   #textsize = "15px", 
+    #   #textsize = "15px",
     #   interactive=T, permanent = F,
     #   direction = "auto")
   ) |>
-  setView(15, 55, 4) |> addLegend("bottomright", pal = pal, values = unique(included_countries$supported),
-                                  title = "Support level") 
+  setView(15, 55, 4) |>
+  addLegend("bottomright",
+    pal = pal, values = unique(included_countries$supported),
+    title = "Support level"
+  )
 library(htmltools)
 browsable(
   tagList(list(

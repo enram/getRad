@@ -20,11 +20,23 @@
 #'   as.POSIXct(Sys.Date())
 #' )
 #' }
-get_pvol <- function(radar = NULL, time, ...) {
-  if (is.null(radar) || !is_character(radar) || !all(nchar(radar)== 5)) {
-    cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes",
-              class = "getRad_error_radar_not_character"
+get_pvol <- function(radar = NULL, time = NULL, ...) {
+  if (is.null(radar) || !is_character(radar) || !all(nchar(radar) == 5) || anyDuplicated(radar)) {
+    cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes. None should be duplicated.",
+      class = "getRad_error_radar_not_character"
     )
+  }
+  if (is.null(time) || !inherits(time, "POSIXct") || anyDuplicated(time) || any((as.numeric(time) %% 300) != 0)) {
+    cli_abort("The argument {.arg time} to the {.fn get_pvol} function should be a POSIXct without duplications. All timestamps should be rounded to 5 minutes intervals.",
+      class = "getRad_error_time_not_correct"
+    )
+  }
+  if (length(time) != 1) {
+    l <- (purrr::map(time, get_pvol, radar = radar, ...))
+    if (length(radar) != 1) {
+      l <- unlist(l, recursive = F)
+    }
+    return(l)
   }
   if (length(radar) != 1) {
     return(purrr::map(radar, get_pvol, time = time, ...))
@@ -49,7 +61,8 @@ select_get_pvol_function <- function(radar) {
   ))
   if (rlang::is_na(fun)) {
     cli_abort("No suitable function exist downloading from the radar {radar}",
-              class="getRad_error_no_function_for_radar_with_country_code")
+      class = "getRad_error_no_function_for_radar_with_country_code"
+    )
   }
   return(fun)
 }

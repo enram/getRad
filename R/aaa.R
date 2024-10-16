@@ -3,7 +3,7 @@
   op <- options()
   op.getRad <- list(
     getRad.key_prefix = "getRad_",
-    getRad.user_agent = paste("R package getRad",getNamespaceVersion("getRad"))
+    getRad.user_agent = paste("R package getRad", getNamespaceVersion("getRad"))
   )
   toset <- !(names(op.getRad) %in% names(op))
   if (any(toset)) options(op.getRad[toset])
@@ -13,6 +13,6 @@
 rlang::on_load(rlang::local_use_cli(inline = T))
 
 
-req_user_agent_getrad<-function(req){
-  req_user_agent(req,string=getOption("getRad.user_agent"))
+req_user_agent_getrad <- function(req) {
+  req_user_agent(req, string = getOption("getRad.user_agent"))
 }

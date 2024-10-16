@@ -27,7 +27,8 @@ get_pvol_nl <- function(radar, time, ...) {
       cli_abort(
         c("There was an authorization error, possibly this relates to using an invalid API key",
           i = "Please check if you set the correct `nl_api_key` with {.code get_secret('nl_api_key')}"
-        ), cnd=cnd,
+        ),
+        cnd = cnd,
         class = "getRad_error_get_pvol_nl_authorization_failure"
       )
     }
@@ -45,7 +46,7 @@ get_pvol_nl <- function(radar, time, ...) {
       x = "The program to convert KNMI data to ODIM format is not found.",
       i = "The source code for this binary can be obtained from this location {.file {system.file('extra/KNMI_vol_h5_to_ODIM_h5.c', package='getRad')}}",
       i = "Please compile the binary and include it in the search path as a program named {.arg KNMI_vol_h5_to_ODIM_h5}",
-      i="On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
+      i = "On linux systems this can be done with the following command {.code h5cc KNMI_vol_h5_to_ODIM_h5.c -o KNMI_vol_h5_to_ODIM_h5}.",
       i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
     ), class = "getRad_error_no_nl_converter_found")
   }

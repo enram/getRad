@@ -43,11 +43,11 @@ Here are some examples of volume data with biological information that can be do
 library(getRad)
 library(bioRad)
 # Plot insect movements in Finland (Mäkinen et al. 2022)
-pvol<-get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz="UTC"))
-plot(project_as_ppi(get_scan(pvol,0), range_max = 75000))
+pvol <- get_pvol("fianj", as.POSIXct("2012-5-17 14:15", tz = "UTC"))
+plot(project_as_ppi(get_scan(pvol, 0), range_max = 75000))
 
 # Spring migration in Estonia
-pvol<-get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz="UTC+1"))
+pvol <- get_pvol("nlhrw", as.POSIXct("2023-3-19 22:15", tz = "UTC+1"))
 plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ```
 

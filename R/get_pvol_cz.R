@@ -2,7 +2,7 @@
 
 
 get_pvol_cz <- function(radar, time, ...) {
-  time_chr <- time_pos <- base<- resp<-NULL
+  time_chr <- time_pos <- base <- resp <- NULL
   urls <- c(
     glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_z/hdf5/"),
     glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_u/hdf5/"),
@@ -59,7 +59,7 @@ get_pvol_cz <- function(radar, time, ...) {
     lapply(l[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(l[[1]], -"param")
   )))) {
-    cli_abort("Not all polar volumes have the same attributes", class="getRad_error_differing_attributes_cz")
+    cli_abort("Not all polar volumes have the same attributes", class = "getRad_error_differing_attributes_cz")
   }
   pvol <- Reduce(
     function(x, y) {

@@ -5,7 +5,7 @@ get_pvol_dk <- function(radar, time, ...) {
       "https://dmigw.govcloud.dk/v1/radardata/download"
     )
   ) |>
-    req_user_agent_getrad()|>
+    req_user_agent_getrad() |>
     req_url_path_append(
       glue::glue(getOption(
         "getRad.dk_file_format",

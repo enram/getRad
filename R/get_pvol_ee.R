@@ -16,16 +16,19 @@ get_pvol_ee <- function(radar, time, ...) {
             list(greaterThanOrEqual = list(
               field = "Timestamp", value = strftime(time, "%Y-%m-%dT%H:%M:%OS6%z")
             )),
-            list(lessThanOrEqual = list(field = "Timestamp",
-                                        value = strftime(time, "%Y-%m-%dT%H:%M:%OS6%z")))
+            list(lessThanOrEqual = list(
+              field = "Timestamp",
+              value = strftime(time, "%Y-%m-%dT%H:%M:%OS6%z")
+            ))
           ))
         ),
         list(isEqual = list(
           field = "Radar",
           value = dplyr::case_match(
             radar,
-                                    "eesur" ~ "S\u00FCrgavere radar (SUR)",
-                                    "eehar" ~ "Harku radar (HAR)")
+            "eesur" ~ "S\u00FCrgavere radar (SUR)",
+            "eehar" ~ "Harku radar (HAR)"
+          )
         ))
       )))))))
     ) |>

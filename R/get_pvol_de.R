@@ -1,39 +1,47 @@
 get_pvol_de <- function(radar, time, ...) {
-  time_pos<-base<-iter<-param<-resp<-time_chr<-NULL
+  time_pos <- base <- iter <- param <- resp <- time_chr <- NULL
   # https://opendata.dwd.de/weather/radar/sites
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_00-2024061011155700-hnr-10339-hd5
   # https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/hnr/hdf5/filter_simple/ras07-stqual-vol5minng01_sweeph5onem_dbzh_09-2024061206040300-hnr-10339-hd5
-  time<-lubridate::with_tz(time,"UTC")
-  rlang::check_installed(c("xml2","lubridate","tidyr"),"to import data from German weather radars")
-  urls <-c(glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/{substr(radar,3,5)}/hdf5/filter_simple/"),
-           glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_v/{substr(radar,3,5)}/hdf5/filter_simple/"))
+  time <- lubridate::with_tz(time, "UTC")
+  rlang::check_installed(c("xml2", "lubridate", "tidyr"), "to import data from German weather radars")
+  urls <- c(
+    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_z/{substr(radar,3,5)}/hdf5/filter_simple/"),
+    glue::glue("https://opendata.dwd.de/weather/radar/sites/sweep_vol_v/{substr(radar,3,5)}/hdf5/filter_simple/")
+  )
 
   res <- lapply(urls, \(x) request(x) |>
-                  req_user_agent_getrad()|>
-                  req_perform() |>
+    req_user_agent_getrad() |>
+    req_perform() |>
     resp_body_html() |>
     xml2::xml_find_all("//a/@href") |>
     xml2::xml_text())
-  data.frame(base = urls) |> dplyr::mutate(file = res) |>
+  data.frame(base = urls) |>
+    dplyr::mutate(file = res) |>
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
     tidyr::separate_wider_delim(file,
       delim = "-", cols_remove = F,
       names = c("ras", "qual", "sweep", "time_chr", "radar", "odim", "h5")
     ) |>
-    dplyr::mutate(time_pos = strptime(time_chr, "%Y%m%d%H%M%S", tz='UTC')) |>
-    dplyr::filter(lubridate::`%within%`(time_pos,
-                                        lubridate::interval(time,
-                                                            time + lubridate::minutes(5)))) -> files_to_get
+    dplyr::mutate(time_pos = strptime(time_chr, "%Y%m%d%H%M%S", tz = "UTC")) |>
+    dplyr::filter(lubridate::`%within%`(
+      time_pos,
+      lubridate::interval(
+        time,
+        time + lubridate::minutes(5)
+      )
+    )) -> files_to_get
   if (nrow(files_to_get) != 20) {
     cli_abort("The server returned an unexpected number of files",
-          class="getRad_error_germany_unexpected_number_of_files")
+      class = "getRad_error_germany_unexpected_number_of_files"
+    )
   }
 
   files_to_get |> dplyr::mutate(
     req = purrr::pmap(list(x = base, y = file), \(x, y) request(x) |>
       req_url_path_append(y) |>
-        req_user_agent_getrad())
+      req_user_agent_getrad())
   ) -> files_to_get
 
 
@@ -42,7 +50,8 @@ get_pvol_de <- function(radar, time, ...) {
     req_perform_parallel(paths = replicate(length(files_to_get$req), tempfile(fileext = ".h5")))
   files_to_get |>
     dplyr::mutate(
-      tempfile = purrr::map_chr(resp, ~ .x$body)) |>
+      tempfile = purrr::map_chr(resp, ~ .x$body)
+    ) |>
     dplyr::mutate(
       scan = purrr::map(tempfile, ~ read_scan(.x)),
       remove = purrr::map(tempfile, ~ file.remove(.x))
@@ -53,13 +62,13 @@ get_pvol_de <- function(radar, time, ...) {
     ) |>
     dplyr::group_by(iter) |>
     dplyr::summarize(scan = list(scan), param = list(param), radar = unique(radar)) |>
-    dplyr::mutate(scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))) ->files_to_get
+    dplyr::mutate(scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))) -> files_to_get
 
   pvol <- list_to_pvol(files_to_get$scan, time = time, radar = radar)
   return(pvol)
 }
 
-list_to_pvol <- function(x, time, radar, source="constructed from opendata.dwd.de") {
+list_to_pvol <- function(x, time, radar, source = "constructed from opendata.dwd.de") {
   stopifnot(length(time) == 1)
   stopifnot(length(radar) == 1)
   stopifnot(is.list(x))
