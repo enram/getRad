@@ -7,10 +7,20 @@ Authors@R: c(
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "aut"),
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
   )
-Description: This package facilitates downloading radar data for biological research. Currently the main functionality is downloading polar volume data from open repositories of European countries.
+Description: This package facilitates downloading radar data for
+    biological research. Currently the main functionality is downloading
+    polar volume data from open repositories of European countries.
 License: MIT + file LICENSE
 URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
 BugReports: https://github.com/enram/getRad/issues
+Imports: 
+    bioRad,
+    cli,
+    dplyr,
+    glue,
+    httr2,
+    purrr,
+    rlang
 Suggests:
     askpass,
     htmltools,
@@ -26,16 +36,9 @@ Suggests:
     tidyr,
     withr,
     xml2
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: 
-    bioRad,
-    cli,
-    dplyr,
-    glue,
-    httr2,
-    purrr,
-    rlang
-VignetteBuilder: knitr
