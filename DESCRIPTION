@@ -13,6 +13,8 @@ Description: This package facilitates downloading radar data for
 License: MIT + file LICENSE
 URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
 BugReports: https://github.com/enram/getRad/issues
+Depends: 
+    R (>= 4.1.0)
 Imports: 
     bioRad,
     cli,
