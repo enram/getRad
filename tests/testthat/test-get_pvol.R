@@ -3,20 +3,52 @@
 
 test_that("get_pvol radar argument", {
   expect_error(get_pvol(), class = "getRad_error_radar_not_character")
-  expect_error(get_pvol(1L, time = as.POSIXct(Sys.Date())), class = "getRad_error_radar_not_character")
-  expect_error(get_pvol("nldhlu", time = as.POSIXct(Sys.Date())), class = "getRad_error_radar_not_character")
-  expect_error(get_pvol(c("nlhrw", "nldhlu"), time = as.POSIXct(Sys.Date())), class = "getRad_error_radar_not_character")
-  expect_error(get_pvol(c("nlhrw", "nldhl", "nlhrw"), time = as.POSIXct(Sys.Date())), class = "getRad_error_radar_not_character")
-  expect_error(get_pvol("nnhrw", time = as.POSIXct(Sys.Date())), class = "getRad_error_no_function_for_radar_with_country_code")
+  expect_error(
+    get_pvol(1L, time = as.POSIXct(Sys.Date())),
+    class = "getRad_error_radar_not_character"
+  )
+  expect_error(
+    get_pvol("nldhlu", time = as.POSIXct(Sys.Date())),
+    class = "getRad_error_radar_not_character"
+  )
+  expect_error(
+    get_pvol(c("nlhrw", "nldhlu"), time = as.POSIXct(Sys.Date())),
+    class = "getRad_error_radar_not_character"
+  )
+  expect_error(
+    get_pvol(c("nlhrw", "nldhl", "nlhrw"), time = as.POSIXct(Sys.Date())),
+    class = "getRad_error_radar_not_character"
+  )
+  expect_error(
+    get_pvol("nnhrw", time = as.POSIXct(Sys.Date())),
+    class = "getRad_error_no_function_for_radar_with_country_code"
+  )
 })
 
 test_that("get_pvol time argument", {
-  expect_error(get_pvol("nlhrw", time = "asdf"), class = "getRad_error_time_not_correct")
-  expect_error(get_pvol("nlhrw"), class = "getRad_error_time_not_correct")
-  expect_error(get_pvol("nlhrw", time = 1L), class = "getRad_error_time_not_correct")
-  expect_error(get_pvol("nlhrw", time = Sys.Date()), class = "getRad_error_time_not_correct")
-  expect_error(get_pvol("nlhrw", time = as.POSIXct(Sys.Date())[c(1, 1)]), class = "getRad_error_time_not_correct")
-  expect_error(get_pvol("nlhrw", time = as.POSIXct(Sys.Date()) + 1), class = "getRad_error_time_not_correct")
+  expect_error(get_pvol("nlhrw", time = "asdf"),
+    class = "getRad_error_time_not_correct"
+  )
+  expect_error(
+    get_pvol("nlhrw"),
+    class = "getRad_error_time_not_correct"
+  )
+  expect_error(
+    get_pvol("nlhrw", time = 1L),
+    class = "getRad_error_time_not_correct"
+  )
+  expect_error(
+    get_pvol("nlhrw", time = Sys.Date()),
+    class = "getRad_error_time_not_correct"
+  )
+  expect_error(
+    get_pvol("nlhrw", time = as.POSIXct(Sys.Date())[c(1, 1)]),
+    class = "getRad_error_time_not_correct"
+  )
+  expect_error(
+    get_pvol("nlhrw", time = as.POSIXct(Sys.Date()) + 1),
+    class = "getRad_error_time_not_correct"
+  )
 })
 
 test_that("multiple radars work", {
