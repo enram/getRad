@@ -4,7 +4,7 @@
 \alias{get_pvol}
 \title{Retrieve polar volumes}
 \usage{
-get_pvol(radar = NULL, time, ...)
+get_pvol(radar = NULL, time = NULL, ...)
 }
 \arguments{
 \item{radar}{The name of the radar as a scalar character string.}
