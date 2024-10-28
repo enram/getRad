@@ -34,7 +34,7 @@ get_pvol_ee <- function(radar, time, ...) {
     ) |>
     req_retry(
       max_tries = 15, backoff = \(x)sqrt(x) * 2,
-      is_transient = \(resp) resp_status(resp) %in% c(429), retry_on_failure = T
+      is_transient = \(resp) resp_status(resp) %in% c(429), retry_on_failure = TRUE
     ) |>
     req_perform() |>
     resp_body_json() -> files
@@ -49,7 +49,7 @@ get_pvol_ee <- function(radar, time, ...) {
     req_url_path_append("files/0") |>
     req_retry(
       max_tries = 15, backoff = \(x)sqrt(x) * 2,
-      is_transient = \(resp) resp_status(resp) %in% c(429), retry_on_failure = T
+      is_transient = \(resp) resp_status(resp) %in% c(429), retry_on_failure = TRUE
     ) |>
     req_perform(path = tempfile(fileext = ".h5")) -> req
   pvol <- bioRad::read_pvolfile(req$body, ...)

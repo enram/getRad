@@ -21,7 +21,7 @@ get_pvol_de <- function(radar, time, ...) {
     tidyr::unnest(file) |>
     dplyr::filter(file != "../") |>
     tidyr::separate_wider_delim(file,
-      delim = "-", cols_remove = F,
+      delim = "-", cols_remove = FALSE,
       names = c("ras", "qual", "sweep", "time_chr", "radar", "odim", "h5")
     ) |>
     dplyr::mutate(time_pos = strptime(time_chr, "%Y%m%d%H%M%S", tz = "UTC")) |>
@@ -57,7 +57,7 @@ get_pvol_de <- function(radar, time, ...) {
       remove = purrr::map(tempfile, ~ file.remove(.x))
     ) |>
     tidyr::separate_wider_delim(sweep,
-      delim = "_", cols_remove = F,
+      delim = "_", cols_remove = FALSE,
       names = c("vol", "name", "param", "iter")
     ) |>
     dplyr::group_by(iter) |>

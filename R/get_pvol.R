@@ -34,7 +34,7 @@ get_pvol <- function(radar = NULL, time = NULL, ...) {
   if (length(time) != 1) {
     l <- (purrr::map(time, get_pvol, radar = radar, ...))
     if (length(radar) != 1) {
-      l <- unlist(l, recursive = F)
+      l <- unlist(l, recursive = FALSE)
     }
     return(l)
   }

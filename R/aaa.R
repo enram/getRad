@@ -10,7 +10,7 @@
   rlang::run_on_load()
   invisible()
 }
-rlang::on_load(rlang::local_use_cli(inline = T))
+rlang::on_load(rlang::local_use_cli(inline = TRUE))
 
 
 req_user_agent_getrad <- function(req) {

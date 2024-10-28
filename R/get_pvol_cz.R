@@ -69,7 +69,7 @@ get_pvol_cz <- function(radar, time, ...) {
           i
         },
         x$scans, y$scans,
-        SIMPLIFY = F
+        SIMPLIFY = FALSE
       )
       x
     },

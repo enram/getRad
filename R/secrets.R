@@ -48,7 +48,7 @@ set_secret <- function(name, secret = NULL) {
   }
   sname <- paste0(getOption("getRad.key_prefix", default = cli_abort("The option `getRad.key_prefix` is not found", class = "getRad_error_key_prefix_not_found_setting")), name)
   keyring::key_set_with_value(service = sname, password = secret)
-  invisible(T)
+  invisible(TRUE)
 }
 
 
