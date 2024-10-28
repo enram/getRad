@@ -53,9 +53,10 @@ test_that("get_pvol time argument", {
 
 test_that("multiple radars work", {
   skip_if_offline()
+  multiple_radars <- c("fianj", "dehnr")
   expect_type(
     pvl <- get_pvol(
-      radar = c("fianj", "dehnr"),
+      radar = multiple_radars,
       time = as.POSIXct(Sys.Date())
     ),
     "list"
@@ -64,7 +65,7 @@ test_that("multiple radars work", {
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$radar),
-    as.list(r)
+    as.list(multiple_radars)
   )
 })
 
