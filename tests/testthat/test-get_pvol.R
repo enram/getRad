@@ -56,7 +56,7 @@ test_that("multiple radars work", {
   expect_true(
     is.list(
       pvl <- get_pvol(
-        r <- c("fianj", "dehnr"),
+        radar = c("fianj", "dehnr"),
         time = as.POSIXct(Sys.Date())
         )
       )
