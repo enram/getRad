@@ -51,7 +51,8 @@ set_secret <- function(name, secret = NULL) {
     cli_inform(list_secrets[[name]])
     rlang::check_installed("askpass", "To securely provide a secret")
     secret <- askpass::askpass(
-      glue::glue("Please provide the value for `{name}`"))
+      glue::glue("Please provide the value for `{name}`")
+    )
   }
   sname <- paste0(
     getOption("getRad.key_prefix",

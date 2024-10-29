@@ -215,7 +215,11 @@ rr <- function(file, quantity = "/", radar, datetime, geo, dtype) {
   attributes(data)$geo <- geo
   attributes(data)$param <- as.character(attr$quantity)
   attributes(data)$conversion <- conversion
-  list(quantityName = paste0(strsplit(file, "_")[[1]][6],
-                             "_", basename(dirname(file))),
-       quantity = data)
+  list(
+    quantityName = paste0(
+      strsplit(file, "_")[[1]][6],
+      "_", basename(dirname(file))
+    ),
+    quantity = data
+  )
 }

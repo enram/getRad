@@ -13,7 +13,10 @@ test_that("Pvol for the Netherlands can be downloaded", {
     param = "all"
   ), "pvol")
   expect_true(bioRad::is.pvol(pvol))
-  expect_identical(lubridate::floor_date(pvol$datetime, "1 mins"), lubridate::with_tz(time, "UTC"))
+  expect_identical(
+    lubridate::floor_date(pvol$datetime, "1 mins"),
+    lubridate::with_tz(time, "UTC")
+  )
 })
 
 test_that("failure to find converter", {

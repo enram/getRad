@@ -55,7 +55,7 @@ get_pvol <- function(radar = NULL, time = NULL, ...) {
 
 # Helper function to find the function for a specific radar
 select_get_pvol_function <- function(radar) {
-  cntry_code <- substr(radar, 1, 2)
+  cntry_code <- substr(radar, 1, 2) # nolint
   fun <- (dplyr::case_when(
     cntry_code == "nl" ~ "get_pvol_nl",
     cntry_code == "fi" ~ "get_pvol_fi",

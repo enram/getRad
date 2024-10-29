@@ -73,13 +73,15 @@ test_that("multiple timestamps work", {
   skip_if_offline()
   multiple_timestamps <-
     lubridate::ymd_hms(
-      paste(lubridate::today(tzone = "UTC"),
-            "00:45:00"
+      paste(
+        lubridate::today(tzone = "UTC"),
+        "00:45:00"
       ),
-      paste(lubridate::today(tzone = "UTC"),
-            "00:55:00"
+      paste(
+        lubridate::today(tzone = "UTC"),
+        "00:55:00"
       )
-  )
+    )
   expect_type(
     pvl <- get_pvol(
       c("fianj"),
@@ -99,18 +101,22 @@ test_that("multiple timestamps and radars work", {
   multiple_radars <- c("fivim", "deess")
   multiple_timestamps <-
     lubridate::ymd_hms(
-      paste(lubridate::today(tzone = "UTC"),
-            "00:35:00"
+      paste(
+        lubridate::today(tzone = "UTC"),
+        "00:35:00"
       ),
-      paste(lubridate::today(tzone = "UTC"),
-            "00:45:00"
+      paste(
+        lubridate::today(tzone = "UTC"),
+        "00:45:00"
       )
     )
   expect_type(
-    pvl <- get_pvol(radar = multiple_radars,
-                    time = multiple_timestamps),
+    pvl <- get_pvol(
+      radar = multiple_radars,
+      time = multiple_timestamps
+    ),
     "list"
-    )
+  )
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
     lapply(pvl, \(x) x$datetime),
