@@ -32,21 +32,36 @@ included_countries <- dplyr::tribble(
   "ee", "The repository seems to implement quite strict rate limiting therefore retries are implemented. However the http error 429 is still frequently returned.", NA, "Readable", NA, c("Data" = "https://avaandmed.keskkonnaportaal.ee/dhs/Active/documentList.aspx?ViewId=b92201f4-8b48-4d3a-b410-30c8ce4016d5")
 ) |>
   dplyr::left_join(
-
-    rnaturalearth::ne_countries("medium") |> dplyr::mutate(key_lower = tolower(iso_a2_eh)),
+    rnaturalearth::ne_countries("medium") |>
+      dplyr::mutate(key_lower = tolower(iso_a2_eh)),
     by = c(code = "key_lower")
   ) |>
   sf::st_as_sf() |>
   dplyr::rowwise() |>
-  dplyr::mutate(supported = factor(supported), links_html = dplyr::if_else(length(links) == 0, "", paste("<p><strong>Links: </strong><ul>", paste0("<li><a href='", links, "'>", names(links), "</a></li>", collapse = ""), "</ul></p>")))
+  dplyr::mutate(
+    supported = factor(supported),
+    links_html = dplyr::if_else(
+      length(links) == 0, "",
+      paste(
+        "<p><strong>Links: </strong><ul>",
+        paste0("<li><a href='", links, "'>",
+          names(links), "</a></li>",
+          collapse = ""
+        ), "</ul></p>"
+      )
+    )
+  )
 
 stopifnot(!any(is.na(included_countries$name)))
 pal <- colorFactor("plasma", levels = unique(included_countries$supported))
 labels <- glue::glue(
   "<h5>{included_countries$name}</h5><br/>
   <p>{included_countries$description}</p>
-  {dplyr::if_else(!is.na(included_countries$time),paste('<p><strong>Temporal restrictions:</strong>',included_countries$time,'</p>'),'')}
-  {dplyr::if_else(!is.na(included_countries$license),paste('<p><strong>License:</strong>',included_countries$license,'</p>'),'')}
+  {dplyr::if_else(!is.na(included_countries$time),
+  paste('<p><strong>Temporal restrictions:</strong>',
+  included_countries$time,'</p>'),'')}
+  {dplyr::if_else(!is.na(included_countries$license),
+  paste('<p><strong>License:</strong>',included_countries$license,'</p>'),'')}
   {included_countries$links_html}",
 ) %>% lapply(htmltools::HTML)
 leaf <- leaflet(width = "100%") |>
@@ -59,12 +74,7 @@ leaf <- leaflet(width = "100%") |>
       color = "#666",
       bringToFront = TRUE
     ), fillColor = ~ pal(supported),
-    popup = labels,
-    # labelOptions = labelOptions(
-    #   style = list("font-weight" = "normal", padding = "3px 8px", width="250px",    "white-space"="normal"),
-    #   #textsize = "15px",
-    #   interactive=T, permanent = F,
-    #   direction = "auto")
+    popup = labels
   ) |>
   setView(15, 55, 4) |>
   addLegend("bottomright",
