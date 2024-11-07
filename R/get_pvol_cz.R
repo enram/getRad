@@ -75,7 +75,7 @@ get_pvol_cz <- function(radar, time, ...) {
     lapply(l[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(l[[1]], -"param")
   )))) {
-    cli_abort("Not all polar volumes have the same attributes",
+    cli::cli_abort("Not all polar volumes have the same attributes",
       class = "getRad_error_differing_attributes_cz"
     )
   }

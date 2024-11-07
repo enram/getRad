@@ -13,7 +13,6 @@
 #' @importFrom httr2 resp_body_json
 #' @importFrom httr2 req_body_json
 #' @importFrom httr2 req_retry
-#' @importFrom cli cli_abort cli_inform
 #' @importFrom rlang is_scalar_character is_character
 ## usethis namespace: end
 NULL

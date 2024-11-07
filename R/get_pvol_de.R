@@ -40,7 +40,7 @@ get_pvol_de <- function(radar, time, ...) {
       )
     ))
   if (nrow(files_to_get) != 20) {
-    cli_abort("The server returned an unexpected number of files",
+    cli::cli_abort("The server returned an unexpected number of files",
       class = "getRad_error_germany_unexpected_number_of_files"
     )
   }

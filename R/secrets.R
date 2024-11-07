@@ -3,19 +3,19 @@
 get_secret <- function(name) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!is_scalar_character(name)) {
-    cli_abort("{.arg name} should be a scalar character",
+    cli::cli_abort("{.arg name} should be a scalar character",
       class = "getRad_error_get_secret_no_scalar_character"
     )
   }
   sname <- paste0(
     getOption("getRad.key_prefix",
-      default = cli_abort("The option `getRad.key_prefix` is not found",
+      default = cli::cli_abort("The option `getRad.key_prefix` is not found",
         class = "getRad_error_key_prefix_not_found_getting"
       )
     ), name
   )
   if (!(sname %in% keyring::key_list(sname)$service)) {
-    cli_abort(
+    cli::cli_abort(
       c(
         x = "The {.arg {sname}} secret is not in the keyring.",
         i = 'Please use {.code set_secret("{name}")} to store the secret.'
@@ -43,12 +43,12 @@ get_secret <- function(name) {
 set_secret <- function(name, secret = NULL) {
   rlang::check_installed("keyring", "to manage secrets in getRad")
   if (!is_scalar_character(name)) {
-    cli_abort("{.arg name} should be a scalar character",
+    cli::cli_abort("{.arg name} should be a scalar character",
       class = "getRad_error_set_secret_no_scalar_character"
     )
   }
   if (rlang::is_null(secret)) {
-    cli_inform(list_secrets[[name]])
+    cli::cli_inform(list_secrets[[name]])
     rlang::check_installed("askpass", "To securely provide a secret")
     secret <- askpass::askpass(
       glue::glue("Please provide the value for `{name}`")
@@ -56,7 +56,7 @@ set_secret <- function(name, secret = NULL) {
   }
   sname <- paste0(
     getOption("getRad.key_prefix",
-      default = cli_abort("The option `getRad.key_prefix` is not found",
+      default = cli::cli_abort("The option `getRad.key_prefix` is not found",
         class = "getRad_error_key_prefix_not_found_setting"
       )
     ), name

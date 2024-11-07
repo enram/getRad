@@ -43,7 +43,7 @@ get_pvol_ee <- function(radar, time, ...) {
     req_perform() |>
     resp_body_json()
   if (files$numFound == 0 || length(files$documents) != 1) {
-    cli_abort("The expected number of files is not found",
+    cli::cli_abort("The expected number of files is not found",
       class = "getRad_error_get_pvol_ee_differing_n_files"
     )
   }

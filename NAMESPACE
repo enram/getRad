@@ -3,8 +3,6 @@
 export(get_pvol)
 export(get_secret)
 export(set_secret)
-importFrom(cli,cli_abort)
-importFrom(cli,cli_inform)
 importFrom(httr2,req_body_json)
 importFrom(httr2,req_headers)
 importFrom(httr2,req_perform)
