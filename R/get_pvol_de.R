@@ -137,7 +137,7 @@ read_scan <- function(file, scan = "dataset1",
     allParam <- FALSE
   }
   if (!allParam) {
-    quantityNames <- sapply(groups, function(x) {
+    quantityNames <- purrr::map_chr(groups, function(x) {
       rhdf5::h5readAttributes(file, paste(scan, "/", x, "/what",
         sep = ""
       ))$quantity
@@ -176,7 +176,7 @@ read_scan <- function(file, scan = "dataset1",
       radar, datetime, geo, y
     )
   }, x = groups, y = dtypes, SIMPLIFY = FALSE)
-  quantityNames <- sapply(quantities, "[[", "quantityName")
+  quantityNames <- purrr::map_chr(quantities, ~purrr::chuck(.x, "quantityName"))
   quantities <- lapply(quantities, "[[", "quantity")
   names(quantities) <- quantityNames
   if (is.null(attribs.how$wavelength)) {
