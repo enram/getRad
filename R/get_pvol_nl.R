@@ -12,7 +12,7 @@ get_pvol_nl <- function(radar, time, ...) {
   }
 
   resp <- tryCatch(
-    request(url) |>
+    httr2::request(url) |>
       req_user_agent_getrad() |>
       req_url_path_append(
         glue::glue(getOption(

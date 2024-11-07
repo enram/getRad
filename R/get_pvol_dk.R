@@ -1,5 +1,5 @@
 get_pvol_dk <- function(radar, time, ...) {
-  req <- request(
+  req <- httr2::request(
     getOption(
       "getRad.dk_url",
       "https://dmigw.govcloud.dk/v1/radardata/download"

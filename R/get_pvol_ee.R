@@ -1,5 +1,5 @@
 get_pvol_ee <- function(radar, time, ...) {
-  files <- request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/query") |>
+  files <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/query") |>
     req_user_agent_getrad() |>
     req_body_json(
       list(filter = list(and = list(
@@ -47,7 +47,7 @@ get_pvol_ee <- function(radar, time, ...) {
       class = "getRad_error_get_pvol_ee_differing_n_files"
     )
   }
-  req <- request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
+  req <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
     req_user_agent_getrad() |>
     req_url_path_append(files$documents[[1]]$id) |>
     req_url_path_append("files/0") |>

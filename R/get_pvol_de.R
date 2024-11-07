@@ -14,7 +14,7 @@ get_pvol_de <- function(radar, time, ...) {
   )
 
   res <- lapply(urls, function(x) {
-    request(x) |>
+    httr2::request(x) |>
       req_user_agent_getrad() |>
       req_perform() |>
       resp_body_html() |>
@@ -49,7 +49,7 @@ get_pvol_de <- function(radar, time, ...) {
     req = purrr::pmap(
       list(x = base, y = file),
       function(x, y) {
-        request(x) |>
+        httr2::request(x) |>
           req_url_path_append(y) |>
           req_user_agent_getrad()
       }

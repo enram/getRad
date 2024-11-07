@@ -1,6 +1,6 @@
 get_pvol_fi <- function(radar, time, ...) {
   rlang::check_installed("rhdf5", "to maniplate th `h5` files from the Finish data repository")
-  req <- request(
+  req <- httr2::request(
     getOption(
       "getRad.fi_url",
       "http://s3-eu-west-1.amazonaws.com/fmi-opendata-radar-volume-hdf5"
