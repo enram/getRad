@@ -22,7 +22,7 @@
 #' }
 get_pvol <- function(radar = NULL, time = NULL, ...) {
   if (is.null(radar) ||
-    !is_character(radar) ||
+    !rlang::is_character(radar) ||
     !all(nchar(radar) == 5) ||
     anyDuplicated(radar)) {
     cli::cli_abort("The argument {.arg radar} to the {.fn get_pvol} function should be a characters with each a length of 5 characters corresponding to ODIM codes. None should be duplicated.",

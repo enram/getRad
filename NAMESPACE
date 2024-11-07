@@ -3,5 +3,3 @@
 export(get_pvol)
 export(get_secret)
 export(set_secret)
-importFrom(rlang,is_character)
-importFrom(rlang,is_scalar_character)
