@@ -3,7 +3,7 @@ skip_if_offline()
   withr::local_options(list(httr2_progress = FALSE))
   # The api frequently sends a 429 response therefore test is allowed to fail
   get_pvol_q <- purrr::quietly(get_pvol)
-  testthat::show_failure(pvol <- expect_no_error(get_pvol_q("eesur",
+  how_failure(pvol <- expect_no_error(get_pvol_q("eesur",
     time <- as.POSIXct("2024-4-4 20:00:00", tz = "Europe/Helsinki"),
     param = "all"
   )$result))
