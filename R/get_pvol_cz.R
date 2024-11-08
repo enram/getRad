@@ -63,14 +63,14 @@ get_pvol_cz <- function(radar, time, ...) {
       # add h5 how group as it seems to be missing
       mut = purrr::map(tempfile, ~ {
         a <- rhdf5::H5Fopen(.x)
-        g <- rhdf5::H5Gcreate(a, "how")
+        group <- rhdf5::H5Gcreate(a, "how")
         rhdf5::H5Fclose(a)
-        rhdf5::H5Gclose(g)
+        rhdf5::H5Gclose(group)
       }),
       pvol = purrr::map(tempfile, ~ bioRad::read_pvolfile(.x)),
       remove = purrr::map(tempfile, ~ file.remove(.x))
     )
-  l <- lapply(f$pvol, bioRad::attribute_table)
+  l <- purrr::map(purrr::chuck(f, "pvol"), bioRad::attribute_table)
   if (!all(unlist(lapply(
     lapply(l[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(l[[1]], -"param")
