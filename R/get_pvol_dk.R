@@ -10,7 +10,7 @@ get_pvol_dk <- function(radar, time, ...) {
       glue::glue(getOption(
         "getRad.dk_file_format",
         "{radar}_{strftime(time,'%Y%m%d%H%M', tz='UTC')}.vol.h5"
-      )) # TODO check timezone ensure formatting matches with expectation from api
+      ))
     ) |>
     req_url_query(`api-key` = get_secret("dk_api_key")) |>
     req_perform(path = tempfile(fileext = ".h5"))

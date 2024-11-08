@@ -11,7 +11,7 @@ get_pvol_fi <- function(radar, time, ...) {
       glue::glue(getOption(
         "getRad.fi_file_format",
         "{strftime(time,'%Y', tz='UTC')}/{strftime(time,'%m', tz='UTC')}/{strftime(time,'%d', tz='UTC')}/{radar}/{strftime(time,'%Y%m%d%H%M', tz='UTC')}_{radar}_PVOL.h5"
-      )) # TODO check timezone ensure formatting matches with expectation from api
+      ))
     )
 
   req <- req |>
