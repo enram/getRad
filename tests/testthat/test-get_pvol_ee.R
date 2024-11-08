@@ -1,5 +1,5 @@
 test_that("Pvol for estonia can be downloaded", {
-  testthat::skip_if_offline()
+skip_if_offline()
   withr::local_options(list(httr2_progress = FALSE))
   # The api frequently sends a 429 response therefore test is allowed to fail
   get_pvol_q <- purrr::quietly(get_pvol)
