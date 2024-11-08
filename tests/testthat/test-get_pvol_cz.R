@@ -13,7 +13,7 @@ test_that("Check if the available attributes changed", {
   )
 })
 test_that("Pvol for Czechia can be downloaded", {
-  testthat::skip_if_offline()
+  skip_if_offline()
   time <- lubridate::floor_date(
     as.POSIXct(Sys.time(),
       tz = "Europe/Helsinki"
