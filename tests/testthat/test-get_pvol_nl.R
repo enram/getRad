@@ -1,6 +1,7 @@
 test_that("Pvol for the Netherlands can be downloaded", {
   skip_if_offline()
   skip_if(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
+  # make sure local env is used by keyring so that api key can be set
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
@@ -23,6 +24,7 @@ test_that("failure to find converter", {
   skip_if_offline()
   skip_if_not(Sys.which("KNMI_vol_h5_to_ODIM_h5") == "")
 
+  # make sure local env is used by keyring so that api key can be set
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(
@@ -48,6 +50,7 @@ test_that("The Netherlands non existing radar", {
 })
 test_that("Pvol for the Netherlands authenication failure", {
   skip_if_offline()
+  # make sure local env is used by keyring so that api key can be set
   withr::local_options(list("keyring_backend" = "env"))
   # get public key here https://developer.dataplatform.knmi.nl/open-data-api#token
   withr::local_envvar(list("getRad_nl_api_key" = "wrongkey"))

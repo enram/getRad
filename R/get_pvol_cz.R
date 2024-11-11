@@ -57,7 +57,7 @@ get_pvol_cz <- function(radar, time, ...) {
         tempfile(fileext = ".h5")
       )
     )
-  f <- files_to_get |>
+  polar_volumes_tibble <- files_to_get |>
     dplyr::mutate(
       tempfile = purrr::map_chr(resp, ~ .x$body),
       # add h5 how group as it seems to be missing
@@ -71,7 +71,7 @@ get_pvol_cz <- function(radar, time, ...) {
       remove = purrr::map(tempfile, ~ file.remove(.x))
     )
   # Check if all parameter have same attributes
-  list_of_attribute_tables <- purrr::map(purrr::chuck(f, "pvol"), bioRad::attribute_table)
+  list_of_attribute_tables <- purrr::map(purrr::chuck(polar_volumes_tibble, "pvol"), bioRad::attribute_table)
   all_params_same_attributes<-all(unlist(lapply(
     lapply(list_of_attribute_tablesl[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(list_of_attribute_tables[[1]], -"param")
@@ -93,7 +93,7 @@ get_pvol_cz <- function(radar, time, ...) {
       )
       x
     },
-    f$pvol
+    polar_volumes_tibble$pvol
   )
   pvol
 }
