@@ -1,12 +1,12 @@
 #' Retrieve polar volumes
 #'
-#' @param radar The name of the radar as a scalar character string.
+#' @param radar The name of the radar (odim string) as a character string (e.g. `"nlhrw"` or `"fikor"`).
 #' @param time The time as a `POSIXct` for the polar volume to download
-#' @param ... Additional arguments passed on tho the individual reading functions, for example `param="all"` to the bioRad::read_pvolfile function.
+#' @param ... Additional arguments passed on tho the individual reading functions, for example `param="all"` to the [bioRad::read_pvolfile()] function.
 #'
 #' @details
 #'
-#' For more details on specific countries please see the vignettes
+#' For more details on specific countries please see the vignettes.
 #'
 #' @return Either a polar volume or a list of polar volumes
 #' @export

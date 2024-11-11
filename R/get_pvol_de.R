@@ -56,8 +56,6 @@ get_pvol_de <- function(radar, time, ...) {
     )
   )
 
-
-
   files_to_get$resp <- files_to_get$req |>
     req_perform_parallel(
       paths = replicate(
@@ -85,7 +83,6 @@ get_pvol_de <- function(radar, time, ...) {
     dplyr::mutate(
       scan = purrr::map2(scan, param, ~ list_to_scan(.x, .y))
     )
-
   pvol <- list_to_pvol(files_to_get$scan, time = time, radar = radar)
   return(pvol)
 }
@@ -109,11 +106,11 @@ list_to_pvol <- function(x, time, radar,
   output
 }
 
-list_to_scan <- function(x, p) {
+list_to_scan <- function(x, param) {
   xx <- x[[1]]
 
   xx$params <- lapply(x, function(x) x$params[[1]])
-  names(xx$params) <- p
+  names(xx$params) <- param
   xx
 }
 
@@ -176,7 +173,7 @@ read_scan <- function(file, scan = "dataset1",
       radar, datetime, geo, y
     )
   }, x = groups, y = dtypes, SIMPLIFY = FALSE)
-  quantityNames <- purrr::map_chr(quantities, ~purrr::chuck(.x, "quantityName"))
+  quantityNames <- purrr::map_chr(quantities, ~ purrr::chuck(.x, "quantityName"))
   quantities <- lapply(quantities, "[[", "quantity")
   names(quantities) <- quantityNames
   if (is.null(attribs.how$wavelength)) {

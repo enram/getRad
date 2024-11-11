@@ -7,11 +7,11 @@
 get_pvol(radar = NULL, time = NULL, ...)
 }
 \arguments{
-\item{radar}{The name of the radar as a scalar character string.}
+\item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
 
 \item{time}{The time as a \code{POSIXct} for the polar volume to download}
 
-\item{...}{Additional arguments passed on tho the individual reading functions, for example \code{param="all"} to the bioRad::read_pvolfile function.}
+\item{...}{Additional arguments passed on tho the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
 }
 \value{
 Either a polar volume or a list of polar volumes
@@ -20,7 +20,7 @@ Either a polar volume or a list of polar volumes
 Retrieve polar volumes
 }
 \details{
-For more details on specific countries please see the vignettes
+For more details on specific countries please see the vignettes.
 }
 \examples{
 \dontrun{

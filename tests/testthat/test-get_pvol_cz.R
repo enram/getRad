@@ -19,7 +19,7 @@ test_that("Pvol for Czechia can be downloaded", {
       tz = "Europe/Helsinki"
     ) - lubridate::hours(10), "5 mins"
   )
-  expect_s3_class(pvol <- get_pvol("czska",
+  pvol <- expect_s3_class(get_pvol("czska",
     time,
     param = "all"
   ), "pvol")

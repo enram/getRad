@@ -37,7 +37,7 @@ get_pvol_nl <- function(radar, time, ...) {
     req_url(req = resp$request) |>
     req_headers(Authorization = NULL) |>
     req_perform(path = tempfile(fileext = ".h5"))
-  converter <- (getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5"))
+  converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
   if (!file.exists(converter)) {
     converter <- Sys.which(converter)
   }
@@ -50,9 +50,9 @@ get_pvol_nl <- function(radar, time, ...) {
       i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
     ), class = "getRad_error_no_nl_converter_found")
   }
-  ff <- paste0(req$body, ".odim.h5")
-  system(paste(converter, ff, req$body))
-  pvol <- bioRad::read_pvolfile(ff, ...)
-  file.remove(ff, req$body)
+  pvol_path <- paste0(req$body, ".odim.h5")
+  system(paste(converter, pvol_path, req$body))
+  pvol <- bioRad::read_pvolfile(pvol_path, ...)
+  file.remove(pvol_path, req$body)
   return(pvol)
 }

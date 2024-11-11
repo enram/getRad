@@ -7,10 +7,11 @@ test_that("Pvol for the Netherlands can be downloaded", {
   withr::local_envvar(
     list("getRad_nl_api_key" = "eyJvcmciOiI1ZTU1NGUxOTI3NGE5NjAwMDEyYTNlYjEiLCJpZCI6ImE1OGI5NGZmMDY5NDRhZDNhZjFkMDBmNDBmNTQyNjBkIiwiaCI6Im11cm11cjEyOCJ9")
   )
-  expect_s3_class(pvol <- get_pvol("nlhrw",
-    time <- as.POSIXct("2024-4-4 20:00:00",
-      tz = "Europe/Helsinki"
-    ),
+  time <- as.POSIXct("2024-4-4 20:00:00",
+    tz = "Europe/Helsinki"
+  )
+  pvol <- expect_s3_class(get_pvol("nlhrw",
+    time,
     param = "all"
   ), "pvol")
   expect_true(bioRad::is.pvol(pvol))

@@ -3,18 +3,11 @@
 
 get_pvol_cz <- function(radar, time, ...) {
   time_chr <- time_pos <- base <- resp <- NULL
-  urls <- c(
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_z/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_u/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_v/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_w/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_zdr/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_rhohv/hdf5/"),
-    glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_phidp/hdf5/")
-  )
+  params <- c("z", "u", "v", "w", "zdr", "rhohv", "phidp")
+  urls <- glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_{params}/hdf5/")
   rlang::check_installed(
     c("lubridate", "tidyr", "xml2", "rhdf5"),
-    "to read czech radar data"
+    "to read Czech radar data"
   )
   res <- lapply(urls, function(x) {
     request(x) |>
@@ -59,24 +52,27 @@ get_pvol_cz <- function(radar, time, ...) {
     )
   polar_volumes_tibble <- files_to_get |>
     dplyr::mutate(
-      tempfile = purrr::map_chr(resp, ~ .x$body),
+      tempfile = purrr::map_chr(resp, purrr::chuck, "body"),
       # add h5 how group as it seems to be missing
       mut = purrr::map(tempfile, ~ {
-        a <- rhdf5::H5Fopen(.x)
-        group <- rhdf5::H5Gcreate(a, "how")
-        rhdf5::H5Fclose(a)
+        hdf_connection <- rhdf5::H5Fopen(.x)
+        group <- rhdf5::H5Gcreate(hdf_connection, "how")
+        rhdf5::H5Fclose(hdf_connection)
         rhdf5::H5Gclose(group)
       }),
       pvol = purrr::map(tempfile, ~ bioRad::read_pvolfile(.x)),
       remove = purrr::map(tempfile, ~ file.remove(.x))
     )
   # Check if all parameter have same attributes
-  list_of_attribute_tables <- purrr::map(purrr::chuck(polar_volumes_tibble, "pvol"), bioRad::attribute_table)
-  all_params_same_attributes<-all(unlist(lapply(
+  list_of_attribute_tables <- purrr::map(
+    purrr::chuck(polar_volumes_tibble, "pvol"),
+    bioRad::attribute_table
+  )
+  all_params_same_attributes <- all(unlist(lapply(
     lapply(list_of_attribute_tables[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(list_of_attribute_tables[[1]], -"param")
   )))
-  if(!all_params_same_attributes){
+  if (!all_params_same_attributes) {
     cli_abort("Not all polar volumes have the same attributes",
       class = "getRad_error_differing_attributes_cz"
     )
