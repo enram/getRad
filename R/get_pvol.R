@@ -38,11 +38,13 @@ get_pvol <- function(radar = NULL, time = NULL, ...) {
     )
   }
   if (length(time) != 1) {
-    l <- (purrr::map(time, get_pvol, radar = radar, ...))
+    polar_volumes <- (purrr::map(time, get_pvol, radar = radar, ...))
     if (length(radar) != 1) {
-      l <- unlist(l, recursive = FALSE)
+      # in case multiple radars are requested the results of the recursive call is a list of polar volumes,
+      # to prevent a nested list this unlist statement is used
+      polar_volumes <- unlist(polar_volumes, recursive = FALSE)
     }
-    return(l)
+    return(polar_volumes)
   }
   if (length(radar) != 1) {
     return(purrr::map(radar, get_pvol, time = time, ...))
