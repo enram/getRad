@@ -10,7 +10,7 @@ get_pvol_nl <- function(radar, time, ...) {
       class = "getRad_error_netherlands_no_url_for_radar"
     )
   }
-
+  # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
     request(url) |>
       req_user_agent_getrad() |>
@@ -33,10 +33,12 @@ get_pvol_nl <- function(radar, time, ...) {
       )
     }
   )
+  # This request retrieves the file
   req <- resp_body_json(resp)$temporaryDownloadUrl |>
     req_url(req = resp$request) |>
     req_headers(Authorization = NULL) |>
     req_perform(path = tempfile(fileext = ".h5"))
+  # Dutch files need to be converted to the odim format
   converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
   if (!file.exists(converter)) {
     converter <- Sys.which(converter)

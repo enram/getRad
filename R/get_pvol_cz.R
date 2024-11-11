@@ -3,6 +3,8 @@
 
 get_pvol_cz <- function(radar, time, ...) {
   time_chr <- time_pos <- base <- resp <- NULL
+  # All parameters are retrieved from separate files
+  # Here all urls are generated
   params <- c("z", "u", "v", "w", "zdr", "rhohv", "phidp")
   urls <- glue::glue("http://opendata.chmi.cz/meteorology/weather/radar/sites/{substr(radar,3,5)}/vol_{params}/hdf5/")
   rlang::check_installed(
