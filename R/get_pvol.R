@@ -2,7 +2,7 @@
 #'
 #' @param radar The name of the radar as a scalar character string.
 #' @param time The time as a `POSIXct` for the polar volume to download
-#' @param ... Additional arguments passed on tho the individual reading functions, for example `param="all"` to the bioRad::read_pvolfile function.
+#' @param ... Additional arguments passed on to the individual reading functions, for example `param="all"` to the bioRad::read_pvolfile function.
 #'
 #' @details
 #'
