@@ -73,9 +73,9 @@ get_pvol_cz <- function(radar, time, ...) {
   # Check if all parameter have same attributes
   list_of_attribute_tables <- purrr::map(purrr::chuck(polar_volumes_tibble, "pvol"), bioRad::attribute_table)
   all_params_same_attributes<-all(unlist(lapply(
-    lapply(list_of_attribute_tablesl[-1], dplyr::select, -"param"), all.equal,
+    lapply(list_of_attribute_tables[-1], dplyr::select, -"param"), all.equal,
     dplyr::select(list_of_attribute_tables[[1]], -"param")
-  ))) 
+  )))
   if(!all_params_same_attributes){
     cli_abort("Not all polar volumes have the same attributes",
       class = "getRad_error_differing_attributes_cz"
