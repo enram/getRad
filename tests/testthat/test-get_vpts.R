@@ -11,6 +11,11 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
     get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01"),
     "data.frame"
   )
+
+  expect_contains(
+    get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01")$radar,
+    c("bejab", "bewid")
+  )
 })
 
 test_that("get_vpts() can fetch vpts data for a date range", {
