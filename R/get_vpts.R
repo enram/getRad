@@ -31,10 +31,18 @@ get_vpts <- function(radar, date) {
       class = "getRad_error_date_parsable")
   }
   # Parse the provided date argument to a lubridate interval
-  ## If the date is a single date, convert it to an interval
+  ## If the date is a single date, convert it to an interval by adding a whole
+  ## day, minus a second
   if (class(date) != "Interval") {
-    date_interval <- lubridate::interval(date, date)
+    date_interval <-
+      lubridate::interval(
+        lubridate::as_datetime(date),
+        lubridate::as_datetime(date) +
+          lubridate::ddays(1) -
+          lubridate::dseconds(1)
+      )
   }
+
 
   # Discover what data is available for the requested radar and time interval
   coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
