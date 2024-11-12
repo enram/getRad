@@ -41,6 +41,8 @@ get_vpts <- function(radar, date) {
           lubridate::ddays(1) -
           lubridate::dseconds(1)
       )
+  } else {
+    date_interval <- date
   }
 
 
