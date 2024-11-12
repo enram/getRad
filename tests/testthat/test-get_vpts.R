@@ -19,6 +19,21 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
   )
 })
 
+test_that("get_vpts() can fetch data from multiple radar sources", {
+  # Data from UVA
+  expect_contains(
+    get_vpts(radar = "bejab", date = "2018-02-02")$source,
+    "uva"
+  )
+  # Data both on UVA and BALTRAD
+  expect_contains(
+    get_vpts(radar = "bejab", date = "2018-05-18")$source,
+    c("uva", "baltrad")
+  )
+})
+
+
+
 test_that("get_vpts() can fetch vpts data for a date range", {
   radar_interval <- get_vpts(radar = "bejab",
                              lubridate::interval(
