@@ -7,13 +7,14 @@ test_that("get_vpts() can fetch vpts data for a single radar and time", {
 })
 
 test_that("get_vpts() can fetch vpts data for multiple radars", {
+  multiple_radars <- get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01")
   expect_s3_class(
-    get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01"),
+    multiple_radars,
     "data.frame"
   )
 
   expect_contains(
-    get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01")$radar,
+    multiple_radars$radar,
     c("bejab", "bewid")
   )
 })
