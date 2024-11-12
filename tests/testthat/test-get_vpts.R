@@ -1,8 +1,15 @@
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
+  single_radar_single_day <- get_vpts(radar = "bejab", date = "2023-01-01")
   expect_s3_class(
     # A known radar and date combination that ALOFT has data for
-    get_vpts(radar = "bejab", date = "2023-01-01"),
+    single_radar_single_day,
     "data.frame"
+  )
+
+  # Expect a known length so no rows have been accidentally filtered away
+  expect_identical(
+    nrow(single_radar_single_day),
+    7125L
   )
 })
 
