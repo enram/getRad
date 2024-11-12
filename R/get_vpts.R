@@ -96,4 +96,6 @@ get_vpts <- function(radar, date) {
     dplyr::relocate("source", .after = "radar")
 
 
+  # Return the vpts data
+  return(vpts_from_s3)
 }
