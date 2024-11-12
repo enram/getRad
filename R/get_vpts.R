@@ -83,7 +83,15 @@ get_vpts <- function(radar, date) {
     purrr::map(~readr::read_csv(.x,
                                 show_col_types = FALSE,
                                 progress = FALSE)) |>
-    purrr::list_rbind()
+    # Add a column with the radar source to not lose this information
+    purrr::map2(s3_paths, ~dplyr::mutate(.x,
+                              source = string_extract(.y,
+                                                      ".+(?=\\/daily)")
+                              )
+               ) |>
+    purrr::list_rbind() |>
+    # Move the source column to the front, where it makes sense
+    dplyr::relocate("source", .after = "radar")
 
 
 }
