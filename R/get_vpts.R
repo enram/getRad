@@ -126,6 +126,12 @@ get_vpts <- function(radar, date) {
     dplyr::relocate("source", .after = "radar")
 
 
+  # Drop any results outside the requested interval
+  filtered_vpts <-
+    vpts_from_s3 |>
+    dplyr::mutate(datetime = lubridate::as_datetime(datetime)) |>
+    dplyr::filter(datetime %within% date_interval)
+
   # Return the vpts data
-  return(vpts_from_s3)
+  return(filtered_vpts)
 }
