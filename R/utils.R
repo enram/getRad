@@ -7,6 +7,7 @@
 #' @param pattern The regular expression pattern used to match the substring.
 #'
 #' @return The extracted substring.
+#' @noRd
 #'
 #' @examples
 #' string_extract("Hello World", "o W")
@@ -25,7 +26,7 @@ string_extract <- function(string, pattern) {
 #' @param replacement The replacement string.
 #'
 #' @return The modified string with the pattern replaced.
-#'
+#' @noRd
 #' @examples
 #' string_replace("I'm looking for radars", "radar", "bird")
 #'
