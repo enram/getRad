@@ -45,6 +45,14 @@ get_vpts <- function(radar, date) {
                     )
     )
 
+  # Check if the requested radars are present in the coverage
+  if(!all(selected_radars %in% coverage$radar)) {
+    cli::cli_abort(
+      "Radar(s) not found in ALOFT coverage:
+      {selected_radars[!selected_radars %in% coverage$radar]}.",
+      class = "getRad_error_radar_not_found")
+  }
+
   # Filter the coverage data to the selected radars and time interval and
   # convert into paths on the aloft s3 storage
   s3_paths <- dplyr::filter(coverage,
