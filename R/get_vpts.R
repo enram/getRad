@@ -54,10 +54,17 @@ get_vpts <- function(radar, date) {
   }
 
   # Check if the requested date radar combination is present in the coverage
+  ## We need to round the interval because coverage only has daily resolution
+  rounded_interval <-
+    lubridate::interval(
+      lubridate::floor_date(lubridate::int_start(date_interval), "day"),
+      lubridate::ceiling_date(lubridate::int_end(date_interval), "day")
+    )
+
   at_least_one_radar_date_combination_exists <-
     dplyr::filter(coverage,
                 radar %in% selected_radars,
-                date %within% date_interval) |>
+                date %within% rounded_interval) |>
     nrow() > 0
 
   if(!at_least_one_radar_date_combination_exists) {
@@ -68,9 +75,11 @@ get_vpts <- function(radar, date) {
 
   # Filter the coverage data to the selected radars and time interval and
   # convert into paths on the aloft s3 storage
+  ## We need to use the rounded interval because coverage only has daily
+  ## resolution
   s3_paths <- dplyr::filter(coverage,
                 radar %in% selected_radars,
-                date %within% date_interval) |>
+                date %within% rounded_interval) |>
     dplyr::pull(directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>

@@ -64,6 +64,11 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
     lubridate::ymd_hms("2023-01-01 16:59:59")
   )
 
+  # The maximum should actually be rounded by a 15 minute interval
+  expect_identical(
+    max(hour_minute_interval$datetime),
+    lubridate::ymd_hms("2023-01-01 16:45:00")
+  )
 })
 
 test_that("get_vpts() returns an error for a bad radar", {
