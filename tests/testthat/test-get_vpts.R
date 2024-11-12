@@ -20,7 +20,24 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
 })
 
 test_that("get_vpts() can fetch vpts data for a date range", {
+  radar_interval <- get_vpts(radar = "bejab",
+                             lubridate::interval(
+                               lubridate::ymd("2023-01-01"),
+                               lubridate::ymd("2023-01-02")
+                             )
+  )
   expect_s3_class(
+    radar_interval,
+    "data.frame"
+  )
+
+  # Check that the requested dates are present in the output
+  expect_in(
+    unique(as.Date((radar_interval$datetime))),
+    c(as.Date("2023-01-01"), as.Date("2023-01-02"))
+  )
+
+})
     get_vpts(radar = "bejab",
              lubridate::interval(
                lubridate::ymd("2023-01-01"),
