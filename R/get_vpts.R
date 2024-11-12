@@ -61,11 +61,30 @@ get_vpts <- function(radar, date) {
   # Read the vpts csv files
   aloft_data_url <-"https://aloftdata.s3-eu-west-1.amazonaws.com"
 
-  paste(aloft_data_url, s3_paths, sep = "/") |>
+  ## this could also be done by passing the vector of urls to readr::read_csv()
+  ## or vroom::vroom(), but both would be slower because they are not parallel
+  ## and wouldn't declare our custom user agent
+
+  vpts_from_s3 <-
+    paste(aloft_data_url, s3_paths, sep = "/") |>
     purrr::map(httr2::request) |>
-    httr2::req_perform_parallel()
+    # Identify ourselves in the request
+    purrr::map(req_user_agent_getrad) |>
+    # Set retry conditions
+    purrr::map(~ httr2::req_retry(
+      .x,
+      max_tries = 15, backoff = \(x) sqrt(x) * 2,
+      is_transient = \(resp) resp_status(resp) %in% c(429),
+      retry_on_failure = TRUE
+    )) |>
+    # Perform the requests in parallel
+    httr2::req_perform_parallel() |>
+    # Fetch the response bodies and parse it using readr
+    purrr::map(httr2::resp_body_string) |>
+    purrr::map(~readr::read_csv(.x,
+                                show_col_types = FALSE,
+                                progress = FALSE)) |>
+    purrr::list_rbind()
 
-
-  #https://aloftdata.s3-eu-west-1.amazonaws.com/baltrad/daily/bewid/2023/bewid_vpts_20230101.csv
 
 }
