@@ -16,7 +16,7 @@ get_vpts <- function(radar, date) {
   if (!is.character(selected_radars)) {
     cli::cli_abort(
       "Radar argument must be a character vector.",
-      class = "getRad_error_radar_not_single_string")
+      class = "getRad_error_radar_not_character")
   }
 
   # Check that the provided date argument is parsable as a date or interval
