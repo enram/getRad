@@ -1,13 +1,16 @@
-#' Title
+#' Retreive vertical profile time series data from the Aloft data repository
 #'
-#' @param radar
-#' @param date
+#' @inheritParams get_pvol
+#' @param date Either a single date or a [lubridate::interval]
 #'
-#' @return
+#' @return A data frame with the vertical profile time series data
 #'
 #' @export
 #'
 #' @examples
+#' get_vpts(radar = "bejab", date = "2023-01-01")
+#' get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20230301"))
+#' get_vpts("sevil", date = lubridate::interval(lubridate::ymd("2023-01-01"), lubridate::ymd("2023-01-02")))
 get_vpts <- function(radar, date) {
   # Rename radar argument so it's clear that it can contain multiple radars
   selected_radars <- radar
