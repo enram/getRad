@@ -34,7 +34,7 @@ test_that("get_vpts() returns an error for a bad radar", {
   # Radar is not a character vector
   expect_error(
     get_vpts(radar = 1:3, date = "2023-01-01"),
-    class = "getRad_error_radar_not_single_string"
+    class = "getRad_error_radar_not_character"
   )
 })
 
