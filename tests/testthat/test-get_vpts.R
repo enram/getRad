@@ -38,14 +38,32 @@ test_that("get_vpts() can fetch vpts data for a date range", {
   )
 
 })
+
+test_that("get_vpts() supports date intervals with hours and minutes",{
+  hour_minute_interval <-
     get_vpts(radar = "bejab",
              lubridate::interval(
-               lubridate::ymd("2023-01-01"),
-               lubridate::ymd("2023-01-02")
+               lubridate::ymd_hms("2023-01-01 12:00:00"),
+               lubridate::ymd_hms("2023-01-01 16:59:59")
              )
-    ),
+    )
+
+  expect_s3_class(
+    hour_minute_interval,
     "data.frame"
   )
+
+  # The minimum returned date should be within the interval
+  expect_gte(
+    min(hour_minute_interval$datetime),
+    lubridate::ymd_hms("2023-01-01 12:00:00")
+  )
+  # The maximum returned datetime should be within the interval
+  expect_lte(
+    max(hour_minute_interval$datetime),
+    lubridate::ymd_hms("2023-01-01 16:59:59")
+  )
+
 })
 
 test_that("get_vpts() returns an error for a bad radar", {
