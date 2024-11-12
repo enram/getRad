@@ -4,7 +4,6 @@
 #' @param date
 #'
 #' @return
-#' @importFrom lubridate %within%
 #'
 #' @export
 #'
