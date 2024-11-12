@@ -47,7 +47,7 @@ test_that("get_vpts() returns an error for a bad radar", {
 test_that("get_vpts() returns an error for a bad time argument", {
   # Date not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "bejab", date = "2023-01-02"),
+    get_vpts(radar = "bejab", date = "9000-01-02"),
     class = "getRad_error_date_not_found"
   )
   # Time is not parsable to a date or interval
