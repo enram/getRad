@@ -1,4 +1,4 @@
-#' Retreive vertical profile time series data from the Aloft data repository
+#' Retrieve vertical profile time series data from the Aloft data repository
 #'
 #' @inheritParams get_pvol
 #' @param date Either a single date or a [lubridate::interval]
