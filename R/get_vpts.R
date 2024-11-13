@@ -26,8 +26,10 @@
 #' get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
 #'
 get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
-  # Rename radar argument so it's clear that it can contain multiple radars
+  # Rename radar & source arguments so it's clear that it can contain multiple
+  # radars
   selected_radars <- radar
+  selected_sources <- source
 
   # Check that the provided radar argument is a character vector
   if (!is.character(selected_radars)) {
@@ -106,7 +108,8 @@ get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
   ## resolution
   s3_paths <- dplyr::filter(coverage,
                 radar %in% selected_radars,
-                date %within% rounded_interval) |>
+                date %within% rounded_interval,
+                source %in% selected_sources) |>
     dplyr::pull(directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
