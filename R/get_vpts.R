@@ -122,7 +122,7 @@ get_vpts <- function(radar,
                 radar %in% selected_radars,
                 date %within% rounded_interval,
                 source %in% selected_sources) |>
-    dplyr::pull(directory) |>
+    dplyr::pull(.data$directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
     # Construct the filename using regex magic!
@@ -186,18 +186,14 @@ get_vpts <- function(radar,
   # Drop any results outside the requested interval
   filtered_vpts <-
     vpts_from_s3 |>
-    dplyr::mutate(datetime = lubridate::as_datetime(datetime)) |>
-    dplyr::filter(datetime %within% date_interval)
+    dplyr::mutate(datetime = lubridate::as_datetime(.data$datetime)) |>
+    dplyr::filter(.data$datetime %within% date_interval)
 
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
   if (as_vpts) {
-    # vpts_object <-
-    #   filtered_vpts |>
-    #   # The source column is non standard, and not supported by bioRad
-    #   dplyr::select(-source) |>
-    #   bioRad::as.vpts()
+
     filtered_vpts_no_source <- dplyr::select(filtered_vpts, -source)
 
     vpts_list <- split(filtered_vpts_no_source,
