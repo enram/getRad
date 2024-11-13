@@ -13,7 +13,7 @@
 #' # Fetch vpts data for a single radar and date
 #' get_vpts(radar = "bejab", date = "2023-01-01")
 #' # Fetch vpts data for multiple radars and a single date
-#' get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20230301"))
+#' get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20171015"))
 #' # Fetch vpts data for a single radar and a date range
 #' get_vpts(
 #'     radar = "sevil",
