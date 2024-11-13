@@ -74,10 +74,10 @@ get_vpts <- function(radar,
   coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
   coverage <-
     readr::read_csv(coverage_url, progress = FALSE, show_col_types = FALSE) |>
-    dplyr::mutate(source = string_extract(directory, ".+(?=\\/hdf5)"),
-                  radar = string_extract(directory, "(?<=hdf5\\/)[a-z]{5}"),
+    dplyr::mutate(source = string_extract(.data$directory, ".+(?=\\/hdf5)"),
+                  radar = string_extract(.data$directory, "(?<=hdf5\\/)[a-z]{5}"),
                   date = as.Date(
-                    string_extract(directory,
+                    string_extract(.data$directory,
                                    "[0-9]{4}\\/[0-9]{2}\\/[0-9]{2}$")
                     )
     )
