@@ -142,9 +142,40 @@ get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using readr
     purrr::map(httr2::resp_body_string) |>
-    purrr::map(~readr::read_csv(.x,
-                                show_col_types = FALSE,
-                                progress = FALSE)) |>
+    purrr::map(~readr::read_csv(
+      .x,
+      col_types =
+        list(
+          radar = readr::col_character(),
+          source = readr::col_character(),
+          datetime = readr::col_datetime(),
+          height = readr::col_integer(),
+          u = readr::col_number(),
+          v = readr::col_number(),
+          w = readr::col_number(),
+          ff = readr::col_number(),
+          dd = readr::col_number(),
+          sd_vvp = readr::col_number(),
+          gap = readr::col_logical(),
+          eta = readr::col_number(),
+          dens = readr::col_number(),
+          dbz = readr::col_number(),
+          dbz_all = readr::col_number(),
+          n = readr::col_integer(),
+          n_dbz = readr::col_integer(),
+          n_all = readr::col_integer(),
+          n_dbz_all = readr::col_integer(),
+          rcs = readr::col_number(),
+          sd_vvp_threshold = readr::col_number(),
+          vcp = readr::col_integer(),
+          radar_latitude = readr::col_number(),
+          radar_longitude = readr::col_number(),
+          radar_height = readr::col_integer(),
+          radar_wavelength = readr::col_number(),
+          source_file = readr::col_character()
+        ),
+      show_col_types = FALSE,
+      progress = FALSE)) |>
     # Add a column with the radar source to not lose this information
     purrr::map2(s3_paths, ~dplyr::mutate(.x,
                               source = string_extract(.y,
