@@ -40,14 +40,13 @@ test_that("get_vpts() can fetch data from multiple radar sources", {
 })
 
 test_that("get_vpts() returns columns of the expected type", {
-  expect_identical(
-    get_vpts(radar = c("deflg"), date = lubridate::ymd("20171015")) |>
-      purrr::map(class),
+
+  expected_col_types <-
     list(
       radar = "character",
       source = "character",
       datetime = c("POSIXct", "POSIXt"),
-      height = "numeric",
+      height = "integer",
       u = "numeric",
       v = "numeric",
       w = "numeric",
@@ -59,54 +58,31 @@ test_that("get_vpts() returns columns of the expected type", {
       dens = "numeric",
       dbz = "numeric",
       dbz_all = "numeric",
-      n = "numeric",
-      n_dbz = "numeric",
-      n_all = "numeric",
-      n_dbz_all = "numeric",
+      n = "integer",
+      n_dbz = "integer",
+      n_all = "integer",
+      n_dbz_all = "integer",
       rcs = "numeric",
       sd_vvp_threshold = "numeric",
-      vcp = "logical",
+      vcp = "integer",
       radar_latitude = "numeric",
       radar_longitude = "numeric",
-      radar_height = "numeric",
+      radar_height = "integer",
       radar_wavelength = "numeric",
       source_file = "character"
     )
+
+  expect_identical(
+    get_vpts(radar = c("deflg"), date = lubridate::ymd("20171015")) |>
+      purrr::map(class),
+    expected_col_types
   )
 
   # Specific radar causing trouble
   expect_identical(
     get_vpts(radar = c("dehnr"), date = lubridate::ymd("20171015")) |>
       purrr::map(class),
-    list(
-      radar = "character",
-      source = "character",
-      datetime = c("POSIXct", "POSIXt"),
-      height = "numeric",
-      u = "numeric",
-      v = "numeric",
-      w = "numeric",
-      ff = "numeric",
-      dd = "numeric",
-      sd_vvp = "numeric",
-      gap = "logical",
-      eta = "numeric",
-      dens = "numeric",
-      dbz = "numeric",
-      dbz_all = "numeric",
-      n = "numeric",
-      n_dbz = "numeric",
-      n_all = "numeric",
-      n_dbz_all = "numeric",
-      rcs = "numeric",
-      sd_vvp_threshold = "numeric",
-      vcp = "logical",
-      radar_latitude = "numeric",
-      radar_longitude = "numeric",
-      radar_height = "numeric",
-      radar_wavelength = "numeric",
-      source_file = "character"
-    )
+    expected_col_types
   )
 })
 
