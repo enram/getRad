@@ -1,5 +1,6 @@
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
-  single_radar_single_day <- get_vpts(radar = "bejab", date = "2023-01-01")
+  single_radar_single_day <-
+    get_vpts(radar = "bejab", date = "2023-01-01", as_vpts = FALSE)
   expect_s3_class(
     # A known radar and date combination that ALOFT has data for
     single_radar_single_day,
@@ -14,7 +15,9 @@ test_that("get_vpts() can fetch vpts data for a single radar and time", {
 })
 
 test_that("get_vpts() can fetch vpts data for multiple radars", {
-  multiple_radars <- get_vpts(radar = c("bejab", "bewid"), date = "2023-01-01")
+  multiple_radars <- get_vpts(radar = c("bejab", "bewid"),
+                              date = "2023-01-01",
+                              as_vpts = FALSE)
   expect_s3_class(
     multiple_radars,
     "data.frame"
@@ -29,12 +32,12 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
 test_that("get_vpts() can fetch data from multiple radar sources", {
   # Data from UVA
   expect_contains(
-    get_vpts(radar = "bejab", date = "2018-02-02")$source,
+    get_vpts(radar = "bejab", date = "2018-02-02", as_vpts = FALSE)$source,
     "uva"
   )
   # Data both on UVA and BALTRAD
   expect_contains(
-    get_vpts(radar = "bejab", date = "2018-05-18")$source,
+    get_vpts(radar = "bejab", date = "2018-05-18", as_vpts = FALSE)$source,
     c("uva", "baltrad")
   )
 })
@@ -73,14 +76,18 @@ test_that("get_vpts() returns columns of the expected type", {
     )
 
   expect_identical(
-    get_vpts(radar = c("deflg"), date = lubridate::ymd("20171015")) |>
+    get_vpts(radar = c("deflg"),
+             date = lubridate::ymd("20171015"),
+             as_vpts = FALSE) |>
       purrr::map(class),
     expected_col_types
   )
 
   # Specific radar causing trouble
   expect_identical(
-    get_vpts(radar = c("dehnr"), date = lubridate::ymd("20171015")) |>
+    get_vpts(radar = c("dehnr"),
+             date = lubridate::ymd("20171015"),
+             as_vpts = FALSE) |>
       purrr::map(class),
     expected_col_types
   )
@@ -89,7 +96,10 @@ test_that("get_vpts() returns columns of the expected type", {
 test_that("get_vpts() can fetch data from a specific source only", {
   # Data from only BALTRAD even if UVA is available for the same interval
   expect_identical(
-    get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad") |>
+    get_vpts(radar = "bejab",
+             date = "2018-05-18",
+             source = "baltrad",
+             as_vpts = FALSE) |>
       dplyr::pull("source") |>
       unique(),
     "baltrad"
@@ -101,7 +111,8 @@ test_that("get_vpts() can fetch vpts data for a date range", {
                              lubridate::interval(
                                lubridate::ymd("2023-01-01"),
                                lubridate::ymd("2023-01-02")
-                             )
+                             ),
+                             as_vpts = FALSE
   )
   expect_s3_class(
     radar_interval,
@@ -122,7 +133,8 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
              lubridate::interval(
                lubridate::ymd_hms("2023-01-01 12:00:00"),
                lubridate::ymd_hms("2023-01-01 16:59:59")
-             )
+             ),
+             as_vpts = FALSE
     )
 
   expect_s3_class(
