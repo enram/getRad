@@ -2,7 +2,8 @@
 #'
 #' @inheritParams get_pvol
 #' @param date Either a single date or a [lubridate::interval]
-#'
+#' @param source The source of the data. One of baltrad, uva or ecog-04003.
+#' If not provided, data from all the available sources will be returned.
 #' @return A data frame with the vertical profile time series data
 #'
 #' @export
@@ -11,7 +12,7 @@
 #' get_vpts(radar = "bejab", date = "2023-01-01")
 #' get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20230301"))
 #' get_vpts("sevil", date = lubridate::interval(lubridate::ymd("2023-01-01"), lubridate::ymd("2023-01-02")))
-get_vpts <- function(radar, date) {
+get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
   # Rename radar argument so it's clear that it can contain multiple radars
   selected_radars <- radar
 

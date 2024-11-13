@@ -2,20 +2,23 @@
 % Please edit documentation in R/get_vpts.R
 \name{get_vpts}
 \alias{get_vpts}
-\title{Retreive vertical profile time series data from the Aloft data repository}
+\title{Retrieve vertical profile time series data from the Aloft data repository}
 \usage{
-get_vpts(radar, date)
+get_vpts(radar, date, source = c("baltrad", "uva", "ecog-04003"))
 }
 \arguments{
 \item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
 
 \item{date}{Either a single date or a \link[lubridate:interval]{lubridate::interval}}
+
+\item{source}{The source of the data. One of baltrad, uva or ecog-04003.
+If not provided, data from all the available sources will be returned.}
 }
 \value{
 A data frame with the vertical profile time series data
 }
 \description{
-Retreive vertical profile time series data from the Aloft data repository
+Retrieve vertical profile time series data from the Aloft data repository
 }
 \examples{
 get_vpts(radar = "bejab", date = "2023-01-01")
