@@ -27,6 +27,8 @@
 #' get_vpts("bejab", lubridate::interval("20210101","20210301"))
 #' # Fetch vpts data for a single radar and a date range from a specific source
 #' get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
+#' # Return a data.frame instead of a vpts object
+#' get_vpts(radar = "chlem", date = "2023-03-10", as_vpts = FALSE)
 #'
 get_vpts <- function(radar,
                      date,
