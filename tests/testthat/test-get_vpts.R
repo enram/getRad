@@ -148,6 +148,28 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
   )
 })
 
+test_that("get_vpts() can return data as a vpts object compatible with getRad",{
+  return_as_vpts_object <- get_vpts(radar = "depro",
+                                    date = "2016-03-05",
+                                    as_vpts = TRUE)
+  expect_s3_class(
+    return_as_vpts_object,
+    "vpts"
+  )
+  expect_type(
+    return_as_vpts_object,
+    "list"
+  )
+  # The returned object should be identical as if created via bioRad
+  expect_identical(
+    get_vpts(radar = "depro", date = "2016-03-05", as_vpts = FALSE) |>
+      dplyr::select(-source) |>
+      bioRad::as.vpts()
+    ,
+    return_as_vpts_object
+  )
+})
+
 test_that("get_vpts() returns an error for a bad radar", {
   # Radar not found in ALOFT coverage
   expect_error(

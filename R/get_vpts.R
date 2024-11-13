@@ -4,6 +4,9 @@
 #' @param date Either a single date or a [lubridate::interval]
 #' @param source The source of the data. One of baltrad, uva or ecog-04003.
 #' If not provided, data from all the available sources will be returned.
+#' @param as_vpts Logical. By default the data is returned as a
+#' [bioRad::summary.vpts] object. If set to FALSE, a data.frame will be
+#' returned instead with an extra column for the radar source.
 #' @return A data frame with the vertical profile time series data
 #'
 #' @export
@@ -25,7 +28,10 @@
 #' # Fetch vpts data for a single radar and a date range from a specific source
 #' get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
 #'
-get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
+get_vpts <- function(radar,
+                     date,
+                     source = c("baltrad", "uva", "ecog-04003"),
+                     as_vpts = TRUE) {
   # Rename radar & source arguments so it's clear that it can contain multiple
   # radars
   selected_radars <- radar
@@ -178,5 +184,17 @@ get_vpts <- function(radar, date, source = c("baltrad", "uva", "ecog-04003")) {
     dplyr::filter(datetime %within% date_interval)
 
   # Return the vpts data
-  return(filtered_vpts)
+  ## By default, return drop the source column and convert to a vpts object for
+  ## usage in bioRAD
+  if (as_vpts) {
+    vpts_object <-
+      filtered_vpts |>
+      # The source column is non standard, and not supported by bioRad
+      dplyr::select(-source) |>
+      bioRad::as.vpts()
+    return(vpts_object)
+  } else {
+  ## If as_vpts is set to FALSE, return as a tibble with the source column
+    return(filtered_vpts)
+  }
 }
