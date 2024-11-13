@@ -1,5 +1,5 @@
 get_pvol_fi <- function(radar, time, ...) {
-  rlang::check_installed("rhdf5", "to maniplate th `h5` files from the Finish data repository")
+  rlang::check_installed("rhdf5", "to maniplate the `h5` files from the Finish data repository")
   req <- httr2::request(
     getOption(
       "getRad.fi_url",
@@ -11,17 +11,17 @@ get_pvol_fi <- function(radar, time, ...) {
       glue::glue(getOption(
         "getRad.fi_file_format",
         "{strftime(time,'%Y', tz='UTC')}/{strftime(time,'%m', tz='UTC')}/{strftime(time,'%d', tz='UTC')}/{radar}/{strftime(time,'%Y%m%d%H%M', tz='UTC')}_{radar}_PVOL.h5"
-      )) # TODO check timezone ensure formatting matches with expectation from api
+      ))
     )
 
   req <- req |>
     httr2::req_perform(path = tempfile(fileext = ".h5"))
   rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.")
-  a <- rhdf5::H5Fopen(req$body)
-  g <- rhdf5::H5Gopen(a, "what")
-  rhdf5::h5writeAttribute("PVOL", g, "object")
-  rhdf5::H5Fclose(a)
-  rhdf5::H5Gclose(g)
+  hdf_connection <- rhdf5::H5Fopen(req$body)
+  group <- rhdf5::H5Gopen(hdf_connection, "what")
+  rhdf5::h5writeAttribute("PVOL", group, "object")
+  rhdf5::H5Fclose(hdf_connection)
+  rhdf5::H5Gclose(group)
   pvol <- bioRad::read_pvolfile(req$body, ...)
   file.remove(req$body)
   return(pvol)

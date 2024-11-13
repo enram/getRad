@@ -10,7 +10,7 @@ get_pvol_nl <- function(radar, time, ...) {
       class = "getRad_error_netherlands_no_url_for_radar"
     )
   }
-
+  # This request generate the temporary download url where the polar volume file can be retrieved
   resp <- tryCatch(
     httr2::request(url) |>
       req_user_agent_getrad() |>
@@ -33,11 +33,13 @@ get_pvol_nl <- function(radar, time, ...) {
       )
     }
   )
+  # This request retrieves the file
   req <- httr2::resp_body_json(resp)$temporaryDownloadUrl |>
     httr2::req_url(req = resp$request) |>
     httr2::req_headers(Authorization = NULL) |>
     httr2::req_perform(path = tempfile(fileext = ".h5"))
-  converter <- (getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5"))
+  # Dutch files need to be converted to the odim format
+  converter <- getOption("getRad.nl_converter", "KNMI_vol_h5_to_ODIM_h5")
   if (!file.exists(converter)) {
     converter <- Sys.which(converter)
   }
@@ -50,9 +52,9 @@ get_pvol_nl <- function(radar, time, ...) {
       i = "If another name is used or the program is not in the search path use options to locate the program ({.run options(getRad.nl_converter='')})."
     ), class = "getRad_error_no_nl_converter_found")
   }
-  ff <- paste0(req$body, ".odim.h5")
-  system(paste(converter, ff, req$body))
-  pvol <- bioRad::read_pvolfile(ff, ...)
-  file.remove(ff, req$body)
+  pvol_path <- paste0(req$body, ".odim.h5")
+  system(paste(converter, pvol_path, req$body))
+  pvol <- bioRad::read_pvolfile(pvol_path, ...)
+  file.remove(pvol_path, req$body)
   return(pvol)
 }

@@ -1,12 +1,12 @@
 #' Retrieve polar volumes
 #'
-#' @param radar The name of the radar as a scalar character string.
+#' @param radar The name of the radar (odim string) as a character string (e.g. `"nlhrw"` or `"fikor"`).
 #' @param time The time as a `POSIXct` for the polar volume to download
-#' @param ... Additional arguments passed on tho the individual reading functions, for example `param="all"` to the bioRad::read_pvolfile function.
+#' @param ... Additional arguments passed on to the individual reading functions, for example `param="all"` to the [bioRad::read_pvolfile()] function.
 #'
 #' @details
 #'
-#' For more details on specific countries please see the vignettes
+#' For more details on specific countries please see the vignettes.
 #'
 #' @return Either a polar volume or a list of polar volumes
 #' @export
@@ -38,11 +38,14 @@ get_pvol <- function(radar = NULL, time = NULL, ...) {
     )
   }
   if (length(time) != 1) {
-    l <- (purrr::map(time, get_pvol, radar = radar, ...))
+    polar_volumes <- (purrr::map(time, get_pvol, radar = radar, ...))
     if (length(radar) != 1) {
-      l <- unlist(l, recursive = FALSE)
+      # in case multiple radars are requested the results of the recursive call
+      # is a list of polar volumes, to prevent a nested list this unlist
+      # statement is used
+      polar_volumes <- unlist(polar_volumes, recursive = FALSE)
     }
-    return(l)
+    return(polar_volumes)
   }
   if (length(radar) != 1) {
     return(purrr::map(radar, get_pvol, time = time, ...))

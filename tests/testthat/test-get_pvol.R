@@ -64,8 +64,8 @@ test_that("multiple radars work", {
 
   expect_true(all(unlist(lapply(pvl, bioRad::is.pvol))))
   expect_identical(
-    lapply(pvl, \(x) x$radar),
-    as.list(multiple_radars)
+    purrr::map_chr(pvl, ~ purrr::chuck(.x, "radar")),
+    multiple_radars
   )
 })
 
