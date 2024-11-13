@@ -25,6 +25,7 @@ Imports:
     httr2,
     lubridate,
     purrr,
+    readr,
     rlang
 Suggests:
     askpass,
