@@ -1,8 +1,9 @@
 pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
-articles: {}
-last_built: 2024-10-11T14:34Z
+articles:
+  supported_countries: supported_countries.html
+last_built: 2024-11-13T15:38Z
 urls:
   reference: https://enram.github.io/getRad/reference
   article: https://enram.github.io/getRad/articles
