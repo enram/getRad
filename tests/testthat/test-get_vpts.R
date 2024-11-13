@@ -180,6 +180,22 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
     ,
     return_as_vpts_object
   )
+  # This also works when multiple radars are selected
+  ## In this case a list of vpts objects should be returned
+  expect_type(
+    get_vpts(radar = c("depro", "bejab"),
+             date = "2016-03-05",
+             as_vpts = TRUE),
+    "list"
+  )
+
+  expect_identical(
+    get_vpts(radar = c("depro", "bejab"),
+             date = "2016-03-05",
+             as_vpts = TRUE) |>
+      purrr::map_chr(class),
+    c("vpts","vpts")
+  )
 })
 
 test_that("get_vpts() returns an error for a bad radar", {

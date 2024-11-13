@@ -7,14 +7,16 @@
 #' @param as_vpts Logical. By default the data is returned as a
 #' [bioRad::summary.vpts] object. If set to FALSE, a data.frame will be
 #' returned instead with an extra column for the radar source.
-#' @return A data frame with the vertical profile time series data
+#' @return By default, a vpts object is returned. See [bioRad::summary.vpts]
+#' for more information. When multiple radars are selected, a list of vpts
+#' objects will be returned instead. When `as_vpts = FALSE`, a single
+#' data.frame is returned with an extra column for the radar source.
 #'
 #' @importFrom dplyr .data
 #'
 #' @export
 #'
 #' @examplesIf interactive()
-#'
 #' # Fetch vpts data for a single radar and date
 #' get_vpts(radar = "bejab", date = "2023-01-01")
 #' # Fetch vpts data for multiple radars and a single date
@@ -191,12 +193,22 @@ get_vpts <- function(radar,
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
   if (as_vpts) {
-    vpts_object <-
-      filtered_vpts |>
-      # The source column is non standard, and not supported by bioRad
-      dplyr::select(-source) |>
-      bioRad::as.vpts()
-    return(vpts_object)
+    # vpts_object <-
+    #   filtered_vpts |>
+    #   # The source column is non standard, and not supported by bioRad
+    #   dplyr::select(-source) |>
+    #   bioRad::as.vpts()
+    filtered_vpts_no_source <- dplyr::select(filtered_vpts, -source)
+
+    vpts_list <- split(filtered_vpts_no_source,
+                       filtered_vpts_no_source$radar) |>
+      purrr::map(~bioRad::as.vpts(.x)) |>
+      purrr::set_names(unique(filtered_vpts$radar))
+
+    if(length(vpts_list) == 1) {
+      return(purrr::pluck(vpts_list, 1))
+    }
+    return(vpts_list)
   } else {
   ## If as_vpts is set to FALSE, return as a tibble with the source column
     return(filtered_vpts)

@@ -24,14 +24,16 @@ If not provided, data from all the available sources will be returned.}
 returned instead with an extra column for the radar source.}
 }
 \value{
-A data frame with the vertical profile time series data
+By default, a vpts object is returned. See \link[bioRad:summary.vpts]{bioRad::summary.vpts}
+for more information. When multiple radars are selected, a list of vpts
+objects will be returned instead. When \code{as_vpts = FALSE}, a single
+data.frame is returned with an extra column for the radar source.
 }
 \description{
 Retrieve vertical profile time series data from the Aloft data repository
 }
 \examples{
 \dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-
 # Fetch vpts data for a single radar and date
 get_vpts(radar = "bejab", date = "2023-01-01")
 # Fetch vpts data for multiple radars and a single date
