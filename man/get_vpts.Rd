@@ -4,7 +4,12 @@
 \alias{get_vpts}
 \title{Retrieve vertical profile time series data from the Aloft data repository}
 \usage{
-get_vpts(radar, date, source = c("baltrad", "uva", "ecog-04003"))
+get_vpts(
+  radar,
+  date,
+  source = c("baltrad", "uva", "ecog-04003"),
+  as_vpts = TRUE
+)
 }
 \arguments{
 \item{radar}{The name of the radar (odim string) as a character string (e.g. \code{"nlhrw"} or \code{"fikor"}).}
@@ -13,6 +18,10 @@ get_vpts(radar, date, source = c("baltrad", "uva", "ecog-04003"))
 
 \item{source}{The source of the data. One of baltrad, uva or ecog-04003.
 If not provided, data from all the available sources will be returned.}
+
+\item{as_vpts}{Logical. By default the data is returned as a
+\link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to FALSE, a data.frame will be
+returned instead with an extra column for the radar source.}
 }
 \value{
 A data frame with the vertical profile time series data
@@ -26,15 +35,18 @@ Retrieve vertical profile time series data from the Aloft data repository
 # Fetch vpts data for a single radar and date
 get_vpts(radar = "bejab", date = "2023-01-01")
 # Fetch vpts data for multiple radars and a single date
-get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20230301"))
+get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20171015"))
 # Fetch vpts data for a single radar and a date range
 get_vpts(
-    radar = "sevil",
+    radar = "bejab",
     date = lubridate::interval(lubridate::ymd_hms("2023-01-01 00:00:00"),
                                lubridate::ymd_hms("2023-01-02 00:14:00")
                                  )
                                )
+get_vpts("bejab", lubridate::interval("20210101","20210301"))
 # Fetch vpts data for a single radar and a date range from a specific source
 get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
+# Return a data.frame instead of a vpts object
+get_vpts(radar = "chlem", date = "2023-03-10", as_vpts = FALSE)
 \dontshow{\}) # examplesIf}
 }
