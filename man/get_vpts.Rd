@@ -21,7 +21,20 @@ A data frame with the vertical profile time series data
 Retrieve vertical profile time series data from the Aloft data repository
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+# Fetch vpts data for a single radar and date
 get_vpts(radar = "bejab", date = "2023-01-01")
+# Fetch vpts data for multiple radars and a single date
 get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20230301"))
-get_vpts("sevil", date = lubridate::interval(lubridate::ymd("2023-01-01"), lubridate::ymd("2023-01-02")))
+# Fetch vpts data for a single radar and a date range
+get_vpts(
+    radar = "sevil",
+    date = lubridate::interval(lubridate::ymd_hms("2023-01-01 00:00:00"),
+                               lubridate::ymd_hms("2023-01-02 00:14:00")
+                                 )
+                               )
+# Fetch vpts data for a single radar and a date range from a specific source
+get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
+\dontshow{\}) # examplesIf}
 }
