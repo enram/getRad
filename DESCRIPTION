@@ -1,18 +1,45 @@
 Package: getRad
 Title: Access and Standardize Radar Data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "aut"),
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)"))
   )
-Description: What the package does (one paragraph).
+Description: This package facilitates downloading radar data for
+    biological research. Currently the main functionality is downloading
+    polar volume data from open repositories of European countries.
 License: MIT + file LICENSE
 URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
 BugReports: https://github.com/enram/getRad/issues
+Depends: 
+    R (>= 4.1.0)
+Imports: 
+    bioRad,
+    cli,
+    dplyr,
+    glue,
+    httr2,
+    purrr,
+    rlang
 Suggests:
-    testthat (>= 3.0.0)
+    askpass,
+    htmltools,
+    keyring,
+    knitr,
+    leaflet,
+    lubridate,
+    rhdf5,
+    rnaturalearth,
+    rnaturalearthdata,
+    sf,
+    testthat (>= 3.0.0),
+    tidyr,
+    withr,
+    xml2
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
