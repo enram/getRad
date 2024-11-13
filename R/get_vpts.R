@@ -9,6 +9,8 @@
 #' returned instead with an extra column for the radar source.
 #' @return A data frame with the vertical profile time series data
 #'
+#' @importFrom dplyr .data
+#'
 #' @export
 #'
 #' @examplesIf interactive()
