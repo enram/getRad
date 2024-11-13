@@ -7,7 +7,7 @@ Authors@R: c(
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "aut"),
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)")),
     person("Pieter", "Huybrechts", , "pieter.huybrechts@inbo.be", role = "aut",
-           comment = c(ORCID = "0000-0002-6658-6062"))
+           comment = c(ORCID = "0000-0002-6658-6062", affiliation = "Research Institute for Nature and Forest (INBO)"))
   )
 Description: This package facilitates downloading radar data for
     biological research. Currently the main functionality is downloading
