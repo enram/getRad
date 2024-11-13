@@ -200,7 +200,7 @@ get_vpts <- function(radar,
                        filtered_vpts_no_source$radar) |>
       purrr::map(~bioRad::as.vpts(.x)) |>
       purrr::set_names(unique(filtered_vpts$radar))
-
+    # If we are only returning a single radar, don't return a list
     if(length(vpts_list) == 1) {
       return(purrr::pluck(vpts_list, 1))
     }
