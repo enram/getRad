@@ -1,4 +1,5 @@
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
+  skip_if_offline()
   single_radar_single_day <-
     get_vpts(radar = "bejab", date = "2023-01-01", as_vpts = FALSE)
   expect_s3_class(
@@ -15,6 +16,7 @@ test_that("get_vpts() can fetch vpts data for a single radar and time", {
 })
 
 test_that("get_vpts() can fetch vpts data for multiple radars", {
+  skip_if_offline()
   multiple_radars <- get_vpts(radar = c("bejab", "bewid"),
                               date = "2023-01-01",
                               as_vpts = FALSE)
@@ -30,6 +32,7 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
 })
 
 test_that("get_vpts() can fetch data from multiple radar sources", {
+  skip_if_offline()
   # Data from UVA
   expect_contains(
     get_vpts(radar = "bejab", date = "2018-02-02", as_vpts = FALSE)$source,
@@ -43,6 +46,7 @@ test_that("get_vpts() can fetch data from multiple radar sources", {
 })
 
 test_that("get_vpts() returns columns of the expected type", {
+  skip_if_offline()
 
   expected_col_types <-
     list(
@@ -94,6 +98,8 @@ test_that("get_vpts() returns columns of the expected type", {
 })
 
 test_that("get_vpts() can fetch data from a specific source only", {
+  skip_if_offline()
+
   # Data from only BALTRAD even if UVA is available for the same interval
   expect_identical(
     get_vpts(radar = "bejab",
@@ -107,6 +113,8 @@ test_that("get_vpts() can fetch data from a specific source only", {
 })
 
 test_that("get_vpts() can fetch vpts data for a date range", {
+  skip_if_offline()
+
   radar_interval <- get_vpts(radar = "bejab",
                              lubridate::interval(
                                lubridate::ymd("2023-01-01"),
@@ -128,6 +136,8 @@ test_that("get_vpts() can fetch vpts data for a date range", {
 })
 
 test_that("get_vpts() supports date intervals with hours and minutes",{
+  skip_if_offline()
+
   hour_minute_interval <-
     get_vpts(radar = "bejab",
              lubridate::interval(
@@ -161,6 +171,8 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
 })
 
 test_that("get_vpts() can return data as a vpts object compatible with getRad",{
+  skip_if_offline()
+
   return_as_vpts_object <- get_vpts(radar = "depro",
                                     date = "2016-03-05",
                                     as_vpts = TRUE)
@@ -199,6 +211,8 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
 })
 
 test_that("get_vpts() returns an error for a bad radar", {
+  skip_if_offline()
+
   # Radar not found in ALOFT coverage
   expect_error(
     get_vpts(radar = "notaradar", date = "2023-01-01"),
@@ -212,6 +226,8 @@ test_that("get_vpts() returns an error for a bad radar", {
 })
 
 test_that("get_vpts() returns an error for a bad time argument", {
+  skip_if_offline()
+
   # Date not found in ALOFT coverage
   expect_error(
     get_vpts(radar = "bejab", date = "9000-01-02"),
