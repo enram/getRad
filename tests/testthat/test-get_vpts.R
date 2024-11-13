@@ -39,7 +39,15 @@ test_that("get_vpts() can fetch data from multiple radar sources", {
   )
 })
 
-
+test_that("get_vpts() can fetch data from a specific source only", {
+  # Data from only BALTRAD even if UVA is available for the same interval
+  expect_identical(
+    get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad") |>
+      dplyr::pull("source") |>
+      unique(),
+    "baltrad"
+  )
+})
 
 test_that("get_vpts() can fetch vpts data for a date range", {
   radar_interval <- get_vpts(radar = "bejab",
