@@ -77,7 +77,7 @@ get_vpts <- function(radar,
   # Discover what data is available for the requested radar and time interval
   coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
   coverage <-
-    readr::read_csv(coverage_url, progress = FALSE, show_col_types = FALSE) |>
+    vroom::vroom(coverage_url, progress = FALSE, show_col_types = FALSE) |>
     dplyr::mutate(source = string_extract(.data$directory, ".+(?=\\/hdf5)"),
                   radar = string_extract(.data$directory, "(?<=hdf5\\/)[a-z]{5}"),
                   date = as.Date(
@@ -154,23 +154,38 @@ get_vpts <- function(radar,
     httr2::req_perform_parallel() |>
     # Fetch the response bodies and parse it using readr
     purrr::map(httr2::resp_body_string) |>
-    purrr::map(~readr::read_csv(
+    purrr::map(~vroom::vroom(delim = ",",
       .x,
       col_types =
         list(
-          radar = readr::col_character(),
-          datetime = readr::col_datetime(),
-          height = readr::col_integer(),
-          gap = readr::col_logical(),
-          n = readr::col_integer(),
-          n_dbz = readr::col_integer(),
-          n_all = readr::col_integer(),
-          n_dbz_all = readr::col_integer(),
-          vcp = readr::col_integer(),
-          radar_height = readr::col_integer(),
-          source_file = readr::col_character()
+          radar = vroom::col_factor(),
+          datetime = vroom::col_datetime(),
+          height = vroom::col_integer(),
+          u=vroom::col_double(),
+          v=vroom::col_double(),
+          w=vroom::col_double(),
+          ff=vroom::col_double(),
+          dd=vroom::col_double(),
+          sd_vvp=vroom::col_double(),
+          gap = vroom::col_logical(),
+          eta=vroom::col_double(),
+          dens=vroom::col_double(),
+          dbz=vroom::col_double(),
+          dbz_all=vroom::col_double(),
+          n = vroom::col_integer(),
+          n_dbz = vroom::col_integer(),
+          n_all = vroom::col_integer(),
+          n_dbz_all = vroom::col_integer(),
+          rcs=vroom::col_double(),
+          sd_vvp_threshold=vroom::col_double(),
+          vcp = vroom::col_integer(),
+          radar_longitude=vroom::col_double(),
+          radar_latitude=vroom::col_double(),
+          radar_height = vroom::col_integer(),
+          radar_wavelength = vroom::col_double(),
+          source_file = vroom::col_factor()
         ),
-      show_col_types = FALSE,
+      show_col_types = NULL,
       progress = FALSE)) |>
     # Add a column with the radar source to not lose this information
     purrr::map2(s3_paths, ~dplyr::mutate(.x,
