@@ -14,10 +14,10 @@ get_pvol_de <- function(radar, time, ...) {
   )
 
   res <- lapply(urls, function(x) {
-    request(x) |>
+    httr2::request(x) |>
       req_user_agent_getrad() |>
-      req_perform() |>
-      resp_body_html() |>
+      httr2::req_perform() |>
+      httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text()
   })
@@ -40,7 +40,7 @@ get_pvol_de <- function(radar, time, ...) {
       )
     ))
   if (nrow(files_to_get) != 20) {
-    cli_abort("The server returned an unexpected number of files",
+    cli::cli_abort("The server returned an unexpected number of files",
       class = "getRad_error_germany_unexpected_number_of_files"
     )
   }
@@ -49,15 +49,15 @@ get_pvol_de <- function(radar, time, ...) {
     req = purrr::pmap(
       list(x = base, y = file),
       function(x, y) {
-        request(x) |>
-          req_url_path_append(y) |>
+        httr2::request(x) |>
+          httr2::req_url_path_append(y) |>
           req_user_agent_getrad()
       }
     )
   )
 
   files_to_get$resp <- files_to_get$req |>
-    req_perform_parallel(
+    httr2::req_perform_parallel(
       paths = replicate(
         length(files_to_get$req),
         tempfile(fileext = ".h5")

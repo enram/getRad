@@ -32,31 +32,31 @@ get_pvol_ee <- function(radar, time, ...) {
         ))
       ))))
     )))
-  files <- request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/query") |>
+  files <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/query") |>
     req_user_agent_getrad() |>
-    req_body_json(json_list) |>
-    req_retry(
+    httr2::req_body_json(json_list) |>
+    httr2::req_retry(
       max_tries = 15, backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) resp_status(resp) %in% c(429),
+      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
       retry_on_failure = TRUE
     ) |>
-    req_perform() |>
-    resp_body_json()
+    httr2::req_perform() |>
+    httr2::resp_body_json()
   if (files$numFound == 0 || length(files$documents) != 1) {
-    cli_abort("The expected number of files is not found",
+    cli::cli_abort("The expected number of files is not found",
       class = "getRad_error_get_pvol_ee_differing_n_files"
     )
   }
-  req <- request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
+  req <- httr2::request("https://avaandmed.keskkonnaportaal.ee/_vti_bin/RmApi.svc/active/items/") |>
     req_user_agent_getrad() |>
-    req_url_path_append(files$documents[[1]]$id) |>
-    req_url_path_append("files/0") |>
-    req_retry(
+    httr2::req_url_path_append(files$documents[[1]]$id) |>
+    httr2::req_url_path_append("files/0") |>
+    httr2::req_retry(
       max_tries = 15, backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) resp_status(resp) %in% c(429),
+      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
       retry_on_failure = TRUE
     ) |>
-    req_perform(path = tempfile(fileext = ".h5"))
+    httr2::req_perform(path = tempfile(fileext = ".h5"))
   pvol <- bioRad::read_pvolfile(req$body, ...)
   file.remove(req$body)
   return(pvol)

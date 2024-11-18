@@ -11,7 +11,7 @@ get_pvol(radar = NULL, time = NULL, ...)
 
 \item{time}{The time as a \code{POSIXct} for the polar volume to download}
 
-\item{...}{Additional arguments passed on tho the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
+\item{...}{Additional arguments passed on to the individual reading functions, for example \code{param="all"} to the \code{\link[bioRad:read_pvolfile]{bioRad::read_pvolfile()}} function.}
 }
 \value{
 Either a polar volume or a list of polar volumes

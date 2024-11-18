@@ -12,10 +12,10 @@ get_pvol_cz <- function(radar, time, ...) {
     "to read Czech radar data"
   )
   res <- lapply(urls, function(x) {
-    request(x) |>
+    httr2::request(x) |>
       req_user_agent_getrad() |>
-      req_perform() |>
-      resp_body_html() |>
+      httr2::req_perform() |>
+      httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text()
   })
@@ -38,15 +38,15 @@ get_pvol_cz <- function(radar, time, ...) {
     ))
   files_to_get <- files_to_get |> dplyr::mutate(
     req = purrr::pmap(list(x = base, y = file), function(x, y) {
-      request(x) |>
-        req_url_path_append(y) |>
+      httr2::request(x) |>
+        httr2::req_url_path_append(y) |>
         req_user_agent_getrad()
     })
   )
 
 
   files_to_get$resp <- files_to_get$req |>
-    req_perform_parallel(
+    httr2::req_perform_parallel(
       paths = replicate(
         length(files_to_get$req),
         tempfile(fileext = ".h5")
