@@ -1,7 +1,10 @@
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
   skip_if_offline()
   single_radar_single_day <-
-    get_vpts(radar = "bejab", date = "2023-01-01", as_vpts = FALSE)
+    get_vpts(radar = "bejab",
+             date = "2023-01-01",
+             source = "baltrad",
+             as_vpts = FALSE)
   expect_s3_class(
     # A known radar and date combination that ALOFT has data for
     single_radar_single_day,
@@ -19,6 +22,7 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
   skip_if_offline()
   multiple_radars <- get_vpts(radar = c("bejab", "bewid"),
                               date = "2023-01-01",
+                              source = "baltrad",
                               as_vpts = FALSE)
   expect_s3_class(
     multiple_radars,
@@ -99,6 +103,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expect_identical(
     get_vpts(radar = c("deflg"),
              date = lubridate::ymd("20171015"),
+             source = "baltrad",
              as_vpts = FALSE) |>
       purrr::map(class),
     expected_col_types
@@ -108,6 +113,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expect_identical(
     get_vpts(radar = c("dehnr"),
              date = lubridate::ymd("20171015"),
+             source = "uva",
              as_vpts = FALSE) |>
       purrr::map(class),
     expected_col_types
@@ -137,6 +143,7 @@ test_that("get_vpts() can fetch vpts data for a date range", {
                                lubridate::ymd("2023-01-01"),
                                lubridate::ymd("2023-01-02")
                              ),
+                             source = "baltrad",
                              as_vpts = FALSE
   )
   expect_s3_class(
@@ -161,6 +168,7 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
                lubridate::ymd_hms("2023-01-01 12:00:00"),
                lubridate::ymd_hms("2023-01-01 16:59:59")
              ),
+             source = "baltrad",
              as_vpts = FALSE
     )
 
@@ -192,6 +200,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
 
   return_as_vpts_object <- get_vpts(radar = "depro",
                                     date = "2016-03-05",
+                                    source = "uva",
                                     as_vpts = TRUE)
 
   list(
