@@ -233,7 +233,10 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
 
   # The returned object should be identical as if created via bioRad
   expect_identical(
-    get_vpts(radar = "depro", date = "2016-03-05", as_vpts = FALSE) |>
+    get_vpts(radar = "depro",
+             date = "2016-03-05",
+             source = "uva",
+             as_vpts = FALSE) |>
       dplyr::select(-source) |>
       bioRad::as.vpts()
     ,
@@ -244,6 +247,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   expect_type(
     get_vpts(radar = c("depro", "bejab"),
              date = "2016-03-05",
+             source = "uva",
              as_vpts = TRUE),
     "list"
   )
@@ -251,6 +255,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   expect_identical(
     get_vpts(radar = c("depro", "bejab"),
              date = "2016-03-05",
+             source = "uva",
              as_vpts = TRUE) |>
       purrr::map_chr(class) |>
       unname(), #only test for class, names are tested elsewhere
@@ -262,6 +267,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   expect_named(
     get_vpts(radar = c("depro", "bejab"),
              date = "2016-03-05",
+             source = "uva",
              as_vpts = TRUE),
     requested_radars
   )
@@ -270,9 +276,13 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   expect_identical(
     get_vpts(radar = c("depro", "bejab"),
              date = "2016-03-05",
+             source = "uva",
              as_vpts = TRUE) |>
       purrr::chuck("bejab"),
-    get_vpts(radar = "bejab", date = "2016-03-05", as_vpts = TRUE)
+    get_vpts(radar = "bejab",
+             date = "2016-03-05",
+             source = "uva",
+             as_vpts = TRUE)
   )
 })
 
@@ -316,12 +326,14 @@ test_that("get_vpts() returns an error for a bad radar", {
 
   # Radar not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "notaradar", date = "2023-01-01"),
+    get_vpts(radar = "notaradar",
+             date = "2023-01-01",
+             source = "uva"),
     class = "getRad_error_radar_not_found"
   )
   # Radar is not a character vector
   expect_error(
-    get_vpts(radar = 1:3, date = "2023-01-01"),
+    get_vpts(radar = 1:3, date = "2023-01-01", source = "uva"),
     class = "getRad_error_radar_not_character"
   )
 })
@@ -331,12 +343,12 @@ test_that("get_vpts() returns an error for a bad time argument", {
 
   # Date not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "bejab", date = "9000-01-02"),
+    get_vpts(radar = "bejab", date = "9000-01-02", source = "baltrad"),
     class = "getRad_error_date_not_found"
   )
   # Time is not parsable to a date or interval
   expect_error(
-    get_vpts(radar = "bejab", date = 1:3),
+    get_vpts(radar = "bejab", date = 1:3, source = "baltrad"),
     class = "getRad_error_date_parsable"
   )
 })
