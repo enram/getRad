@@ -72,6 +72,16 @@ get_vpts <- function(radar,
       ),
       class = "getRad_error_source_missing")
   }
+
+  ## Only a single source can be fetched from at a time, and it must be one of
+  ## the provided values in the enumeration. New sources must also be added to
+  ## the enumeration in the function definition.
+  if(length(source) > 1) {
+    cli::cli_abort(
+      "Only one source can be queried at a time.",
+      class = "getRad_error_source_multiple")
+  }
+
   ## The provided source must be one of the supported values in the enumeration
 
   # Get the default value of the source arg, even if the user provided
@@ -88,15 +98,6 @@ get_vpts <- function(radar,
           last = " or ")
       ),
       class = "getRad_error_source_invalid")
-  }
-
-  ## Only a single source can be fetched from at a time, and it must be one of
-  ## the provided values in the enumeration. New sources must also be added to
-  ## the enumeration in the function definition.
-  if(length(source) > 1) {
-    cli::cli_abort(
-      "Only one source can be queried at a time.",
-      class = "getRad_error_source_multiple")
   }
 
   # Rename radar & source arguments so it's clear that it can contain multiple
