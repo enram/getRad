@@ -203,11 +203,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
                                     source = "uva",
                                     as_vpts = TRUE)
 
-  list(
-    radar = list("bejab","depro","bejab","bejab"),
-    date = list("2018-05-18","2016-03-05","2018-05-31",lubridate::interval("2018-05-31 18:00:00",
-                                                     "2018-16-01 02:00:00"))
-  ) |> purrr::pmap(get_vpts)
+
 
   expect_s3_class(
     return_as_vpts_object,
@@ -217,6 +213,24 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
     return_as_vpts_object,
     "list"
   )
+
+  # Array of combinations that exposed bugs in the past
+  expect_identical(
+    list(
+      radar = list("bejab", "depro", "bejab", "bejab"),
+      date = list(
+        "2018-05-18",
+        "2016-03-05",
+        "2018-05-31",
+        lubridate::interval("2018-05-31 18:00:00", "2018-06-01 02:00:00")
+      ),
+      source = list("baltrad", "uva", "baltrad", "baltrad")
+    ) |>
+      purrr::pmap(get_vpts) |>
+      purrr::map_chr(class),
+    c("vpts","vpts","vpts","vpts")
+  )
+
   # The returned object should be identical as if created via bioRad
   expect_identical(
     get_vpts(radar = "depro", date = "2016-03-05", as_vpts = FALSE) |>
