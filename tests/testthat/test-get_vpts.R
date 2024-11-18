@@ -205,7 +205,8 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
     get_vpts(radar = c("depro", "bejab"),
              date = "2016-03-05",
              as_vpts = TRUE) |>
-      purrr::map_chr(class),
+      purrr::map_chr(class) |>
+      unname(), #only test for class, names are tested elsewhere
     c("vpts","vpts")
   )
 
