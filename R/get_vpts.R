@@ -79,7 +79,7 @@ get_vpts <- function(radar,
   if(length(source) > 1) {
     cli::cli_abort(
       "Only one source can be queried at a time.",
-      class = "getRad_error_source_multiple")
+      class = "getRad_error_multiple_sources")
   }
 
   ## The provided source must be one of the supported values in the enumeration
