@@ -208,6 +208,24 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
       purrr::map_chr(class),
     c("vpts","vpts")
   )
+
+  ## This list should be named the same as the requested radars
+  requested_radars <- c("depro", "bejab")
+  expect_named(
+    get_vpts(radar = c("depro", "bejab"),
+             date = "2016-03-05",
+             as_vpts = TRUE),
+    requested_radars
+  )
+
+  ## The named child objects should correspond to the correct vpts objects (bug)
+  expect_identical(
+    get_vpts(radar = c("depro", "bejab"),
+             date = "2016-03-05",
+             as_vpts = TRUE) |>
+      purrr::chuck("bejab"),
+    get_vpts(radar = "bejab", date = "2016-03-05", as_vpts = TRUE)
+  )
 })
 
 test_that("get_vpts() returns an error for a bad radar", {
