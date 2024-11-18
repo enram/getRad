@@ -2,42 +2,103 @@
 #'
 #' @inheritParams get_pvol
 #' @param date Either a single date or a [lubridate::interval]
-#' @param source The source of the data. One of baltrad, uva or ecog-04003.
-#' If not provided, data from all the available sources will be returned.
+#' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
+#'   one source can be queried at a time. This is a required argument.
 #' @param as_vpts Logical. By default the data is returned as a
-#' [bioRad::summary.vpts] object. If set to FALSE, a data.frame will be
-#' returned instead with an extra column for the radar source.
-#' @return By default, a vpts object is returned. See [bioRad::summary.vpts]
-#' for more information. When multiple radars are selected, a list of vpts
-#' objects will be returned instead. When `as_vpts = FALSE`, a single
-#' data.frame is returned with an extra column for the radar source.
+#'   [bioRad::summary.vpts] object. If set to FALSE, a data.frame will be
+#'   returned instead with an extra column for the radar source.
+#' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
+#'   more information. When multiple radars are selected, a list of vpts objects
+#'   will be returned instead. When `as_vpts = FALSE`, a single data.frame is
+#'   returned with an extra column for the radar source.
 #'
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
 #' @export
 #'
 #' @examplesIf interactive()
+#'
 #' # Fetch vpts data for a single radar and date
-#' get_vpts(radar = "bejab", date = "2023-01-01")
+#' get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+#'
 #' # Fetch vpts data for multiple radars and a single date
-#' get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20171015"))
+#'
+#' get_vpts(radar = c("dehnr", "deflg"),
+#'   date = lubridate::ymd("20171015")
+#'   source = "baltrad")
+#'
 #' # Fetch vpts data for a single radar and a date range
-#' get_vpts(
-#'     radar = "bejab",
-#'     date = lubridate::interval(lubridate::ymd_hms("2023-01-01 00:00:00"),
-#'                                lubridate::ymd_hms("2023-01-02 00:14:00")
-#'                                  )
-#'                                )
-#' get_vpts("bejab", lubridate::interval("20210101","20210301"))
+#'
+#' get_vpts(radar = "bejab",
+#'          date = lubridate::interval(
+#'              lubridate::ymd_hms("2023-01-01 00:00:00"),
+#'              lubridate::ymd_hms("2023-01-02 00:14:00")
+#'              ),
+#'          source = "baltrad"
+#'         )
+#'
+#' get_vpts("bejab",
+#'          lubridate::interval("20210101","20210301"),
+#'          "bejab")
+#'
 #' # Fetch vpts data for a single radar and a date range from a specific source
-#' get_vpts(radar = "bejab", date = "2018-05-18", source = "baltrad")
+#'
+#' get_vpts(radar = "bejab",
+#'   date = "2016-09-29",
+#'   source = "ecog-04003")
+#'
 #' # Return a data.frame instead of a vpts object
-#' get_vpts(radar = "chlem", date = "2023-03-10", as_vpts = FALSE)
+#'
+#' get_vpts(radar = "chlem",
+#'          date = "2023-03-10",
+#'          source = "baltrad",
+#'          as_vpts = FALSE)
 #'
 get_vpts <- function(radar,
                      date,
                      source = c("baltrad", "uva", "ecog-04003"),
                      as_vpts = TRUE) {
+  # Check source argument
+  ## Check if the source argument was provided, return error if not.
+  if(missing(source) || is.null(source)) {
+    # providing NULL isn't allowed either
+    cli::cli_abort(
+      glue::glue(
+        "Please provide a value for the source argument:
+        possible values are {possible_sources}.",
+        possible_sources = glue::glue_collapse(glue::backtick(source),
+                                               sep = ", ",
+                                               last = " or ")
+      ),
+      class = "getRad_error_source_missing")
+  }
+  ## The provided source must be one of the supported values in the enumeration
+
+  # Get the default value of the source arg, even if the user provided
+  # a different value.
+  supported_sources <- eval(formals()$source)
+  if(!source %in% supported_sources) {
+    cli::cli_abort(
+      glue::glue(
+        "Invalid source {glue::backtick(source)} provided. Possible values are:
+        {possible_sources}.",
+        possible_sources = glue::glue_collapse(
+          glue::backtick(supported_sources),
+          sep = ", ",
+          last = " or ")
+      ),
+      class = "getRad_error_source_invalid")
+  }
+
+  ## Only a single source can be fetched from at a time, and it must be one of
+  ## the provided values in the enumeration. New sources must also be added to
+  ## the enumeration in the function definition.
+  if(length(source) > 1) {
+    cli::cli_abort(
+      "Only one source can be queried at a time.",
+      class = "getRad_error_source_multiple")
+  }
+
   # Rename radar & source arguments so it's clear that it can contain multiple
   # radars
   selected_radars <- radar

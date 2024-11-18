@@ -31,17 +31,34 @@ test_that("get_vpts() can fetch vpts data for multiple radars", {
   )
 })
 
-test_that("get_vpts() can fetch data from multiple radar sources", {
+test_that("get_vpts() can fetch data from a single radar source", {
   skip_if_offline()
-  # Data from UVA
-  expect_contains(
-    get_vpts(radar = "bejab", date = "2018-02-02", as_vpts = FALSE)$source,
+  # Only data from UVA available for this radar day
+  expect_identical(
+    get_vpts(radar = "bejab",
+             date = "2018-02-02",
+             source = "uva",
+             as_vpts = FALSE)$source |>
+      unique(),
     "uva"
   )
-  # Data both on UVA and BALTRAD
-  expect_contains(
-    get_vpts(radar = "bejab", date = "2018-05-18", as_vpts = FALSE)$source,
-    c("uva", "baltrad")
+  # radar day has data both on UVA and BALTRAD
+  expect_identical(
+    get_vpts(radar = "bejab",
+             date = "2018-05-18",
+             source = "baltrad",
+             as_vpts = FALSE)$source |>
+      unique(),
+    "baltrad"
+  )
+
+  expect_identical(
+    get_vpts(radar = "bejab",
+             date = "2018-05-18",
+             source = "uva",
+             as_vpts = FALSE)$source |>
+      unique(),
+    "uva"
   )
 })
 
@@ -176,6 +193,13 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   return_as_vpts_object <- get_vpts(radar = "depro",
                                     date = "2016-03-05",
                                     as_vpts = TRUE)
+
+  list(
+    radar = list("bejab","depro","bejab","bejab"),
+    date = list("2018-05-18","2016-03-05","2018-05-31",lubridate::interval("2018-05-31 18:00:00",
+                                                     "2018-16-01 02:00:00"))
+  ) |> purrr::pmap(get_vpts)
+
   expect_s3_class(
     return_as_vpts_object,
     "vpts"
@@ -226,6 +250,41 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
              as_vpts = TRUE) |>
       purrr::chuck("bejab"),
     get_vpts(radar = "bejab", date = "2016-03-05", as_vpts = TRUE)
+  )
+})
+
+test_that("get_vpts() returns an error when multiple sources are provided", {
+  skip_if_offline()
+
+  expect_error(
+    get_vpts(radar = "bejab",
+             date = "2018-05-18",
+             source = c("baltrad", "uva")),
+    class = "getRad_error_multiple_sources"
+  )
+})
+
+test_that("get_vpts() returns an error when an invalid source is provided",{
+  expect_error(
+    get_vpts("bejab","20241118","not a source"),
+    class = "getRad_error_source_invalid"
+  )
+
+  expect_error(
+    get_vpts("bejab","20241118","baltradz"),
+    class = "getRad_error_source_invalid"
+  )
+})
+
+test_that("get_vpts() returns an error when no source is provided", {
+  expect_error(
+    get_vpts("bejab","20180501"),
+    class = "getRad_error_source_missing"
+  )
+
+  expect_error(
+    get_vpts("bejab","20180501", source = NULL),
+    class = "getRad_error_source_missing"
   )
 })
 
