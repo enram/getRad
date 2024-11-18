@@ -14,5 +14,5 @@ rlang::on_load(rlang::local_use_cli(inline = TRUE))
 
 
 req_user_agent_getrad <- function(req) {
-  req_user_agent(req, string = getOption("getRad.user_agent"))
+  httr2::req_user_agent(req, string = getOption("getRad.user_agent"))
 }

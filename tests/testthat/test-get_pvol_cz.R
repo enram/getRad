@@ -1,8 +1,8 @@
 test_that("Check if the available attributes changed", {
   skip_if_offline()
   expect_identical(
-    request("http://opendata.chmi.cz/meteorology/weather/radar/sites/ska") |>
-      req_perform() |>
+    httr2::request("http://opendata.chmi.cz/meteorology/weather/radar/sites/ska") |>
+      httr2::req_perform() |>
       httr2::resp_body_html() |>
       xml2::xml_find_all("//a/@href") |>
       xml2::xml_text() |>

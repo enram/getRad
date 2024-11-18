@@ -1,13 +1,13 @@
 get_pvol_fi <- function(radar, time, ...) {
   rlang::check_installed("rhdf5", "to maniplate the `h5` files from the Finish data repository")
-  req <- request(
+  req <- httr2::request(
     getOption(
       "getRad.fi_url",
       "http://s3-eu-west-1.amazonaws.com/fmi-opendata-radar-volume-hdf5"
     )
   ) |>
     req_user_agent_getrad() |>
-    req_url_path_append(
+    httr2::req_url_path_append(
       glue::glue(getOption(
         "getRad.fi_file_format",
         "{strftime(time,'%Y', tz='UTC')}/{strftime(time,'%m', tz='UTC')}/{strftime(time,'%d', tz='UTC')}/{radar}/{strftime(time,'%Y%m%d%H%M', tz='UTC')}_{radar}_PVOL.h5"
@@ -15,7 +15,7 @@ get_pvol_fi <- function(radar, time, ...) {
     )
 
   req <- req |>
-    req_perform(path = tempfile(fileext = ".h5"))
+    httr2::req_perform(path = tempfile(fileext = ".h5"))
   rlang::check_installed("rhdf5", "To adjust the polar volume files for Finish data.")
   hdf_connection <- rhdf5::H5Fopen(req$body)
   group <- rhdf5::H5Gopen(hdf_connection, "what")
