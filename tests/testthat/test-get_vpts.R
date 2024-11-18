@@ -51,7 +51,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expected_col_types <-
     list(
       source = "character",
-      radar = "character",
+      radar = "factor",
       datetime = c("POSIXct", "POSIXt"),
       height = "integer",
       u = "numeric",
@@ -76,7 +76,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
       radar_longitude = "numeric",
       radar_height = "integer",
       radar_wavelength = "numeric",
-      source_file = "character"
+      source_file = "factor"
     )
 
   expect_identical(
