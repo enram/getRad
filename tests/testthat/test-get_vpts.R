@@ -45,13 +45,13 @@ test_that("get_vpts() can fetch data from multiple radar sources", {
   )
 })
 
-test_that("get_vpts() returns columns of the expected type", {
+test_that("get_vpts() returns columns of the expected type and order", {
   skip_if_offline()
 
   expected_col_types <-
     list(
-      radar = "character",
       source = "character",
+      radar = "character",
       datetime = c("POSIXct", "POSIXt"),
       height = "integer",
       u = "numeric",

@@ -195,7 +195,7 @@ get_vpts <- function(radar,
                ) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
-    dplyr::relocate("source", .after = "radar")
+    dplyr::relocate("source", .before = "radar")
 
 
   # Drop any results outside the requested interval
