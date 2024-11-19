@@ -72,7 +72,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
   expected_col_types <-
     list(
       source = "character",
-      radar = "factor",
+      radar = "character",
       datetime = c("POSIXct", "POSIXt"),
       height = "integer",
       u = "numeric",
