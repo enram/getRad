@@ -1,6 +1,6 @@
 Package: getRad
 Title: Access and Standardize Radar Data
-Version: 0.1.0
+Version: 0.1.0.9001
 Authors@R: c(
     person("Bart", "Kranstauber", , "b.kranstauber@uva.nl", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8303-780X", affiliation = "University of Amsterdam")),
