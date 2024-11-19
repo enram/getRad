@@ -217,7 +217,6 @@ get_vpts <- function(radar,
     # Fetch the response bodies and parse it using readr
     purrr::map(httr2::resp_body_string) |>
     purrr::map(~vroom::vroom(delim = ",",
-      .x,
       col_types =
         list(
           radar = vroom::col_factor(),
@@ -249,6 +248,7 @@ get_vpts <- function(radar,
         ),
       show_col_types = NULL,
       progress = FALSE)) |>
+                             I(.x),
     # Add a column with the radar source to not lose this information
     purrr::map2(s3_paths, ~dplyr::mutate(.x,
                               source = string_extract(.y,
