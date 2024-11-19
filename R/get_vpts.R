@@ -324,7 +324,7 @@ get_vpts_aloft <- function(radar_odim_code,
                               I(.x),
                               col_types =
                                 list(
-                                  radar = vroom::col_character(),
+                                  radar = vroom::col_factor(),
                                   datetime = vroom::col_datetime(),
                                   height = vroom::col_integer(),
                                   u = vroom::col_double(),
