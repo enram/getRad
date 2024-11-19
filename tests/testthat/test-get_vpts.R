@@ -286,9 +286,15 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   )
 
   # Radar day where vpts objects on aloft have 3 different values for the radar
-  # column
-  expect_named(
-    get_vpts("bejab","2018-05-18","baltrad"),
+  # column, script should have all convert them to the same odim value
+  expect_identical(
+    purrr::chuck(get_vpts("bejab","2018-05-18","baltrad"), "radar"),
+    "bejab"
+  )
+  expect_identical(
+    get_vpts("bejab","2018-05-18","baltrad", as_vpts = FALSE) |>
+      dplyr::pull(.data$radar) |>
+      unique(),
     "bejab"
   )
 })
