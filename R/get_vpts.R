@@ -176,14 +176,119 @@ get_vpts <- function(radar,
       class = "getRad_error_date_not_found")
   }
 
+  vpts_from_s3 <- purrr::map(
+    selected_radars,
+    ~get_vpts_aloft(
+      .x,
+      rounded_interval = rounded_interval,
+      selected_source = selected_sources,
+      coverage = coverage
+    )
+  ) |> radar_to_name()
+
+  # Drop any results outside the requested interval
+  filtered_vpts <-
+    vpts_from_s3 |>
+    purrr::map(
+      \(df) dplyr::mutate(df,
+                          datetime = lubridate::as_datetime(.data$datetime))
+      ) |>
+    purrr::map(
+      \(df) dplyr::filter(df,
+                          .data$datetime %within% date_interval)
+      )
+
+  # Return the vpts data
+  ## By default, return drop the source column and convert to a vpts object for
+  ## usage in bioRAD
+  if (as_vpts) {
+
+    filtered_vpts_no_source <-
+      purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
+
+    vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
+    # If we are only returning a single radar, don't return a list
+    if(length(vpts_list) == 1) {
+      return(purrr::chuck(vpts_list, 1))
+    }
+    return(vpts_list)
+  } else {
+  ## If as_vpts is set to FALSE, return as a tibble with the source column
+    purrr::list_rbind(filtered_vpts)
+  }
+}
+
+
+
+#' Set the list names to the unique value of the radar column
+#'
+#'
+#' @param vpts_df_list A list of vpts data.frames
+#'
+#' @return A list of vpts data.frames with the names set to the unique value of
+#'   the radar column of the data.frames
+#'
+#' @noRd
+#' @examples
+#'
+#' list(dplyr::tibble(radar = "bejab"), dplyr::tibble(radar = "bewid")) |>
+#'   radar_to_name()
+radar_to_name <- function(vpts_df_list) {
+  purrr::set_names(
+    vpts_df_list,
+    purrr::map_chr(
+      vpts_df_list,
+      \(df) unique(dplyr::pull(df, .data$radar))
+    )
+  )
+}
+
+#' Get VPTS data from aloftdata
+#'
+#' This function retrieves VPTS (Vertical Profile Time Series) data from the
+#' aloftdata server.
+#'
+#' - Constructs the S3 paths for the VPTS files based on the input
+#' - Performs parallel HTTP requests to fetch the vpts-csv data
+#' - Parses the response bodies with some assumptions about the column classes
+#' - Adds a column with the radar source
+#' - Overwrites the radar column with the radar_odim_code, all other values for
+#'   this column are considered in error.
+#'
+#'
+#' @param radar_odim_code The radar ODIM code.
+#' @param rounded_interval The interval to fetch data for, rounded to nearest day
+#' @param source The source of the data. One of baltrad, uva or ecog-04003.
+#' @param coverage A data.frame containing the coverage of the aloft data repository.
+#'
+#' @return A list of vpts data.frames
+#'
+#' @examples
+#' get_vpts_aloft("ABC", "2022-01-01/2022-01-02", "source1", coverage_data)
+#'
+#' @noRd
+get_vpts_aloft <- function(radar_odim_code,
+                           rounded_interval,
+                           selected_source,
+                           coverage) {
+
+  # Check that radar_odim_code is a single 5 character string
+  if (!is.character(radar_odim_code) ||
+      nchar(radar_odim_code) != 5 ||
+      length(radar_odim_code) != 1) {
+    cli::cli_abort(
+      "Radar ODIM code must be a single 5 character string.",
+      class = "getRad_error_radar_odim_code_invalid")
+  }
+
   # Filter the coverage data to the selected radars and time interval and
   # convert into paths on the aloft s3 storage
   ## We need to use the rounded interval because coverage only has daily
   ## resolution
   s3_paths <- dplyr::filter(coverage,
-                radar %in% selected_radars,
-                date %within% rounded_interval,
-                source %in% selected_sources) |>
+                           .data$radar %in% radar_odim_code,
+                           .data$date %within% rounded_interval,
+                           .data$source %in% selected_source) |>
     dplyr::pull(.data$directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
@@ -200,8 +305,7 @@ get_vpts <- function(radar,
   ## or vroom::vroom(), but both would be slower because they are not parallel
   ## and wouldn't declare our custom user agent
 
-  vpts_from_s3 <-
-    paste(aloft_data_url, s3_paths, sep = "/") |>
+  paste(aloft_data_url, s3_paths, sep = "/") |>
     purrr::map(httr2::request) |>
     # Identify ourselves in the request
     purrr::map(req_user_agent_getrad) |>
@@ -217,73 +321,48 @@ get_vpts <- function(radar,
     # Fetch the response bodies and parse it using readr
     purrr::map(httr2::resp_body_string) |>
     purrr::map(~vroom::vroom(delim = ",",
-      col_types =
-        list(
-          radar = vroom::col_factor(),
-          datetime = vroom::col_datetime(),
-          height = vroom::col_integer(),
-          u=vroom::col_double(),
-          v=vroom::col_double(),
-          w=vroom::col_double(),
-          ff=vroom::col_double(),
-          dd=vroom::col_double(),
-          sd_vvp=vroom::col_double(),
-          gap = vroom::col_logical(),
-          eta=vroom::col_double(),
-          dens=vroom::col_double(),
-          dbz=vroom::col_double(),
-          dbz_all=vroom::col_double(),
-          n = vroom::col_integer(),
-          n_dbz = vroom::col_integer(),
-          n_all = vroom::col_integer(),
-          n_dbz_all = vroom::col_integer(),
-          rcs=vroom::col_double(),
-          sd_vvp_threshold=vroom::col_double(),
-          vcp = vroom::col_integer(),
-          radar_longitude=vroom::col_double(),
-          radar_latitude=vroom::col_double(),
-          radar_height = vroom::col_integer(),
-          radar_wavelength = vroom::col_double(),
-          source_file = vroom::col_factor()
-        ),
-      show_col_types = NULL,
-      progress = FALSE)) |>
                              I(.x),
+                             col_types =
+                               list(
+                                 radar = vroom::col_factor(),
+                                 datetime = vroom::col_datetime(),
+                                 height = vroom::col_integer(),
+                                 u=vroom::col_double(),
+                                 v=vroom::col_double(),
+                                 w=vroom::col_double(),
+                                 ff=vroom::col_double(),
+                                 dd=vroom::col_double(),
+                                 sd_vvp=vroom::col_double(),
+                                 gap = vroom::col_logical(),
+                                 eta=vroom::col_double(),
+                                 dens=vroom::col_double(),
+                                 dbz=vroom::col_double(),
+                                 dbz_all=vroom::col_double(),
+                                 n = vroom::col_integer(),
+                                 n_dbz = vroom::col_integer(),
+                                 n_all = vroom::col_integer(),
+                                 n_dbz_all = vroom::col_integer(),
+                                 rcs=vroom::col_double(),
+                                 sd_vvp_threshold=vroom::col_double(),
+                                 vcp = vroom::col_integer(),
+                                 radar_longitude=vroom::col_double(),
+                                 radar_latitude=vroom::col_double(),
+                                 radar_height = vroom::col_integer(),
+                                 radar_wavelength = vroom::col_double(),
+                                 source_file = vroom::col_factor()
+                               ),
+                             show_col_types = NULL,
+                             progress = FALSE)) |>
     # Add a column with the radar source to not lose this information
     purrr::map2(s3_paths, ~dplyr::mutate(.x,
-                              source = string_extract(.y,
-                                                      ".+(?=\\/daily)")
-                              )
-               ) |>
+                                         source = string_extract(.y,
+                                                                 ".+(?=\\/daily)")
+    )
+    ) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
-    dplyr::relocate("source", .before = "radar")
-
-
-  # Drop any results outside the requested interval
-  filtered_vpts <-
-    vpts_from_s3 |>
-    dplyr::mutate(datetime = lubridate::as_datetime(.data$datetime)) |>
-    dplyr::filter(.data$datetime %within% date_interval)
-
-  # Return the vpts data
-  ## By default, return drop the source column and convert to a vpts object for
-  ## usage in bioRAD
-  if (as_vpts) {
-
-    filtered_vpts_no_source <- dplyr::select(filtered_vpts, -source)
-
-    vpts_list <- split(filtered_vpts_no_source,
-                       filtered_vpts_no_source$radar) |>
-      purrr::map(~bioRad::as.vpts(.x)) |>
-      purrr::set_names(unique(filtered_vpts$radar))
-    # If we are only returning a single radar, don't return a list
-    if(length(vpts_list) == 1) {
-      return(purrr::chuck(vpts_list, 1))
-    }
-    return(vpts_list)
-  } else {
-  ## If as_vpts is set to FALSE, return as a tibble with the source column
-    return(filtered_vpts)
-  }
+    dplyr::relocate("source", .before = "radar") |>
+    # Overwrite the radar column with the radar_odim_date, all other values are
+    # considered invalid for aloft
+    dplyr::mutate(radar = radar_odim_code)
 }
