@@ -284,6 +284,13 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
              source = "uva",
              as_vpts = TRUE)
   )
+
+  # Radar day where vpts objects on aloft have 3 different values for the radar
+  # column
+  expect_named(
+    get_vpts("bejab","2018-05-18","baltrad"),
+    "bejab"
+  )
 })
 
 test_that("get_vpts() returns an error when multiple sources are provided", {
