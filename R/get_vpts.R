@@ -206,7 +206,7 @@ get_vpts <- function(radar,
     filtered_vpts_no_source <-
       purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))
 
-    vpts_list <- purrr::map(filtered_vpts_no_source, ~bioRad::as.vpts(.x))
+    vpts_list <- purrr::map(filtered_vpts_no_source, bioRad::as.vpts)
     # If we are only returning a single radar, don't return a list
     if(length(vpts_list) == 1) {
       return(purrr::chuck(vpts_list, 1))
