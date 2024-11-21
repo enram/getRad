@@ -349,7 +349,7 @@ get_vpts_aloft <- function(radar_odim_code,
                                   radar_latitude = vroom::col_double(),
                                   radar_height = vroom::col_integer(),
                                   radar_wavelength = vroom::col_double(),
-                                  source_file = vroom::col_factor()
+                                  source_file = vroom::col_character()
                                 ),
                               show_col_types = NULL,
                               progress = FALSE)) |>

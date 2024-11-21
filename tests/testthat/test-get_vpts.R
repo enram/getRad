@@ -97,7 +97,7 @@ test_that("get_vpts() returns columns of the expected type and order", {
       radar_longitude = "numeric",
       radar_height = "integer",
       radar_wavelength = "numeric",
-      source_file = "factor"
+      source_file = "character"
     )
 
   expect_identical(
