@@ -53,7 +53,7 @@ get_vpts_aloft <- function(radar_odim_code,
     cli::cli_abort(
       "Radar(s) not found in ALOFT coverage:
       {selected_radars[!selected_radars %in% coverage$radar]}.",
-      class = "getRad_error_radar_not_found")}
+      class = "getRad_error_aloft_radar_not_found")}
 
   # Check if the requested date radar combination is present in the coverage
   at_least_one_radar_date_combination_exists <-
