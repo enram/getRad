@@ -33,3 +33,26 @@ string_extract <- function(string, pattern) {
 string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
 }
+
+#' Set the list names to the unique value of the radar column
+#'
+#'
+#' @param vpts_df_list A list of vpts data.frames
+#'
+#' @return A list of vpts data.frames with the names set to the unique value of
+#'   the radar column of the data.frames
+#'
+#' @noRd
+#' @examples
+#'
+#' list(dplyr::tibble(radar = "bejab"), dplyr::tibble(radar = "bewid")) |>
+#'   radar_to_name()
+radar_to_name <- function(vpts_df_list) {
+  purrr::set_names(
+    vpts_df_list,
+    purrr::map_chr(
+      vpts_df_list,
+      \(df) unique(dplyr::pull(df, .data$radar))
+    )
+  )
+}
