@@ -66,7 +66,8 @@ get_vpts_aloft <- function(radar_odim_code,
 
   ## this could also be done by passing the vector of urls to readr::read_csv()
   ## or vroom::vroom(), but both would be slower because they are not parallel
-  ## and wouldn't declare our custom user agent
+  ## and wouldn't declare our custom user agent or allow us to set retry
+  ## criteria
 
   paste(aloft_data_url, s3_paths, sep = "/") |>
     purrr::map(httr2::request) |>
