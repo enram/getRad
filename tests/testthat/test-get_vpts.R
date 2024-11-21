@@ -69,6 +69,8 @@ test_that("get_vpts() can fetch data from a single radar source", {
 test_that("get_vpts() returns columns of the expected type and order", {
   skip_if_offline()
 
+  # A helper in bioRad (validate_vpts()) that we call indirectly via
+  # bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1
   expected_col_types <-
     list(
       source = "character",

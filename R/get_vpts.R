@@ -318,7 +318,9 @@ get_vpts_aloft <- function(radar_odim_code,
     )) |>
     # Perform the requests in parallel
     httr2::req_perform_parallel() |>
-    # Fetch the response bodies and parse it using readr
+    # Fetch the response bodies and parse it using vroom
+    ## A helper in bioRad (validate_vpts()) that we call indirectly via
+    #" bioRad::as.vpts() currently doesn't support factors: bioRad v0.8.1
     purrr::map(httr2::resp_body_string) |>
     purrr::map(~ vroom::vroom(delim = ",",
                               I(.x),
