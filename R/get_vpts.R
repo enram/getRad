@@ -125,19 +125,6 @@ get_vpts <- function(radar,
     date_interval <- date
   }
 
-
-  # Discover what data is available for the requested radar and time interval
-  coverage <- get_aloft_coverage()
-
-  # Check if the requested radars are present in the coverage
-  if(!all(selected_radars %in% coverage$radar)) {
-    cli::cli_abort(
-      "Radar(s) not found in ALOFT coverage:
-      {selected_radars[!selected_radars %in% coverage$radar]}.",
-      class = "getRad_error_radar_not_found")
-  }
-
-  # Check if the requested date radar combination is present in the coverage
   ## We need to round the interval because coverage only has daily resolution
   rounded_interval <-
     lubridate::interval(
@@ -145,27 +132,20 @@ get_vpts <- function(radar,
       lubridate::ceiling_date(lubridate::int_end(date_interval), "day")
     )
 
-  at_least_one_radar_date_combination_exists <-
-    dplyr::filter(coverage,
-                radar %in% selected_radars,
-                date %within% rounded_interval) |>
-    nrow() > 0
-
-  if(!at_least_one_radar_date_combination_exists) {
-    cli::cli_abort(
-      "No data found for the requested radar(s) and date(s).",
-      class = "getRad_error_date_not_found")
-  }
-
-  vpts_from_s3 <- purrr::map(
-    selected_radars,
-    ~get_vpts_aloft(
-      .x,
-      rounded_interval = rounded_interval,
-      source = selected_sources,
-      coverage = coverage
-    )
-  ) |> radar_to_name()
+  # Discover what data is available for the requested radar and time interval
+  coverage <- get_aloft_coverage()
+  # Query the selected radars and fetched coverage for aloft vpts data.
+  vpts_from_s3 <-
+    purrr::map(
+      selected_radars,
+      ~ get_vpts_aloft(
+        .x,
+        rounded_interval = rounded_interval,
+        source = selected_sources,
+        coverage = coverage
+      )
+    ) |>
+    radar_to_name()
 
   # Drop any results outside the requested interval
   filtered_vpts <-

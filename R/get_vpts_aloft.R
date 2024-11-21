@@ -48,6 +48,26 @@ get_vpts_aloft <- function(radar_odim_code,
       class = "getRad_error_radar_odim_code_invalid")
   }
 
+  # Check if the requested radars are present in the coverage
+  if(!all(radar_odim_code %in% coverage$radar)) {
+    cli::cli_abort(
+      "Radar(s) not found in ALOFT coverage:
+      {selected_radars[!selected_radars %in% coverage$radar]}.",
+      class = "getRad_error_radar_not_found")}
+
+  # Check if the requested date radar combination is present in the coverage
+  at_least_one_radar_date_combination_exists <-
+    dplyr::filter(coverage,
+                  .data$radar %in% radar_odim_code,
+                  .data$date %within% rounded_interval) |>
+    nrow() > 0
+
+  if(!at_least_one_radar_date_combination_exists) {
+    cli::cli_abort(
+      "No data found for the requested radar(s) and date(s).",
+      class = "getRad_error_date_not_found")
+  }
+
   # Filter the coverage data to the selected radars and time interval and
   # convert into paths on the aloft s3 storage
   ## We need to use the rounded interval because coverage only has daily

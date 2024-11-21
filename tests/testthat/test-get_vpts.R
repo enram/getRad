@@ -395,7 +395,7 @@ test_that("get_vpts() returns an error for a bad radar", {
 
   # Radar not found in ALOFT coverage
   expect_error(
-    get_vpts(radar = "notaradar",
+    get_vpts(radar = "aaaaa",
              date = "2023-01-01",
              source = "uva"),
     class = "getRad_error_radar_not_found"
