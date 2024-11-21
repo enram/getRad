@@ -8,14 +8,15 @@
 #' - Parses the response bodies with some assumptions about the column classes
 #' - Adds a column with the radar source
 #' - Overwrites the radar column with the radar_odim_code, all other values for
-#'   this column are considered in error.
+#' this column are considered in error.
 #'
 #'
 #' @param radar_odim_code The radar ODIM code.
-#' @param rounded_interval The interval to fetch data for, rounded to nearest day
+#' @param rounded_interval The interval to fetch data for, rounded to nearest
+#'   day
 #' @param source The source of the data. One of baltrad, uva or ecog-04003.
-#' @param coverage A data.frame containing the coverage of the aloft data repository.
-#'
+#' @param coverage A data.frame containing the coverage of the aloft data
+#'   repository. If not provided, it will be fetched from via the internet.
 #' @return A list of vpts data.frames
 #'
 #' @importFrom dplyr .data
@@ -28,7 +29,7 @@
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            selected_source,
-                           coverage) {
+                           coverage = get_coverage()) {
   # Check that only one radar is provided (string of length 1)
   if(!rlang::is_string(radar_odim_code)) {
     cli::cli_abort(

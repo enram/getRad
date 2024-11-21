@@ -137,16 +137,7 @@ get_vpts <- function(radar,
 
 
   # Discover what data is available for the requested radar and time interval
-  coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
-  coverage <-
-    vroom::vroom(coverage_url, progress = FALSE, show_col_types = FALSE) |>
-    dplyr::mutate(source = string_extract(.data$directory, ".+(?=\\/hdf5)"),
-                  radar = string_extract(.data$directory, "(?<=hdf5\\/)[a-z]{5}"),
-                  date = as.Date(
-                    string_extract(.data$directory,
-                                   "[0-9]{4}\\/[0-9]{2}\\/[0-9]{2}$")
-                    )
-    )
+  coverage <- get_aloft_coverage()
 
   # Check if the requested radars are present in the coverage
   if(!all(selected_radars %in% coverage$radar)) {
