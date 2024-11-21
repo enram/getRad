@@ -1,17 +1,25 @@
 test_that("get_vpts() can return vpts data as a tibble or vpts object", {
   skip_if_offline()
   # Test that the function can return data as a vpts object
-  return_as_vpts_object <- get_vpts(radar = "depro",
-                                    date = "2016-03-05",
-                                    source = "uva",
-                                    as_tibble = FALSE)
+  ## Create vpts object to test on, but only if it doesn't exist. This way the
+  ## tests can run in any order.
+  returned_vpts_object <-
+    get0(
+      "returned_vpts_object",
+      ifnotfound = get_vpts(
+        radar = "depro",
+        date = "2016-03-05",
+        source = "uva",
+        as_tibble = FALSE
+      )
+    )
 
   expect_s3_class(
-    return_as_vpts_object,
+    returned_vpts_object,
     "vpts"
   )
   expect_type(
-    return_as_vpts_object,
+    returned_vpts_object,
     "list"
   )
 
@@ -28,13 +36,21 @@ test_that("get_vpts() can return vpts data as a tibble or vpts object", {
 test_that("get_vpts() returns a vpts object by default", {
   skip_if_offline()
 
-  return_as_vpts_object <- get_vpts(radar = "depro",
-                                    date = "2016-03-05",
-                                    source = "uva",
-                                    as_tibble = FALSE)
+  ## Create vpts object to test on, but only if it doesn't exist. This way the
+  ## tests can run in any order.
+  returned_vpts_object <-
+    get0(
+      "returned_vpts_object",
+      ifnotfound = get_vpts(
+        radar = "depro",
+        date = "2016-03-05",
+        source = "uva",
+        as_tibble = FALSE
+      )
+    )
 
   expect_identical(
-    return_as_vpts_object,
+    returned_vpts_object,
     get_vpts(radar = "depro",
              date = "2016-03-05",
              source = "uva")
@@ -243,9 +259,18 @@ test_that("get_vpts() supports date intervals with hours and minutes",{
 test_that("get_vpts() can return data as a vpts object compatible with getRad",{
   skip_if_offline()
 
-  return_as_vpts_object <- get_vpts(radar = "depro",
-                                    date = "2016-03-05",
-                                    source = "uva")
+  ## Create vpts object to test on, but only if it doesn't exist. This way the
+  ## tests can run in any order.
+  returned_vpts_object <-
+    get0(
+      "returned_vpts_object",
+      ifnotfound = get_vpts(
+        radar = "depro",
+        date = "2016-03-05",
+        source = "uva",
+        as_tibble = FALSE
+      )
+    )
 
   # Array of combinations that exposed bugs in the past
   expect_identical(
@@ -273,7 +298,7 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
       dplyr::select(-source) |>
       bioRad::as.vpts()
     ,
-    return_as_vpts_object
+    returned_vpts_object
   )
   # This also works when multiple radars are selected
   ## In this case a list of vpts objects should be returned
