@@ -4,13 +4,13 @@
 #' @param date Either a single date or a [lubridate::interval]
 #' @param source The source of the data. One of baltrad, uva or ecog-04003. Only
 #'   one source can be queried at a time. This is a required argument.
-#' @param as_vpts Logical. By default the data is returned as a
-#'   [bioRad::summary.vpts] object. If set to FALSE, a data.frame will be
+#' @param as_tibble Logical. By default the data is returned as a
+#'   [bioRad::summary.vpts] object. If set to TRUE, a [dplyr::tibble()] will be
 #'   returned instead with an extra column for the radar source.
 #' @return By default, a vpts object is returned. See [bioRad::summary.vpts] for
 #'   more information. When multiple radars are selected, a list of vpts objects
-#'   will be returned instead. When `as_vpts = FALSE`, a single data.frame is
-#'   returned with an extra column for the radar source.
+#'   will be returned instead. When `as_tibble = TRUE`, a single
+#'   [dplyr::tibble()] is returned with an extra column for the radar source.
 #'
 #' @importFrom dplyr .data
 #' @importFrom lubridate %within%
@@ -18,46 +18,36 @@
 #'
 #' @examplesIf interactive()
 #'
-#' # Fetch vpts data for a single radar and date
-#' get_vpts(radar = "bejab", date = "2023-01-01", source = "baltrad")
+#'   # Fetch vpts data for a single radar and date get_vpts(radar = "bejab",
+#'   date = "2023-01-01", source = "baltrad")
 #'
-#' # Fetch vpts data for multiple radars and a single date
+#'   # Fetch vpts data for multiple radars and a single date
 #'
-#' get_vpts(radar = c("dehnr", "deflg"),
-#'   date = lubridate::ymd("20171015"),
+#'   get_vpts(radar = c("dehnr", "deflg"), date = lubridate::ymd("20171015"),
 #'   source = "baltrad")
 #'
-#' # Fetch vpts data for a single radar and a date range
+#'   # Fetch vpts data for a single radar and a date range
 #'
-#' get_vpts(radar = "bejab",
-#'          date = lubridate::interval(
-#'              lubridate::ymd_hms("2023-01-01 00:00:00"),
-#'              lubridate::ymd_hms("2023-01-02 00:14:00")
-#'              ),
-#'          source = "baltrad"
-#'         )
+#'   get_vpts(radar = "bejab", date = lubridate::interval(
+#'   lubridate::ymd_hms("2023-01-01 00:00:00"), lubridate::ymd_hms("2023-01-02
+#'   00:14:00") ), source = "baltrad" )
 #'
-#' get_vpts("bejab",
-#'          lubridate::interval("20210101","20210301"),
-#'          "bejab")
+#'   get_vpts("bejab", lubridate::interval("20210101","20210301"), "bejab")
 #'
-#' # Fetch vpts data for a single radar and a date range from a specific source
+#'   # Fetch vpts data for a single radar and a date range from a specific
+#'   source
 #'
-#' get_vpts(radar = "bejab",
-#'   date = "2016-09-29",
-#'   source = "ecog-04003")
+#'   get_vpts(radar = "bejab", date = "2016-09-29", source = "ecog-04003")
 #'
-#' # Return a data.frame instead of a vpts object
+#'   # Return a tibble instead of a vpts object
 #'
-#' get_vpts(radar = "chlem",
-#'          date = "2023-03-10",
-#'          source = "baltrad",
-#'          as_vpts = FALSE)
+#'   get_vpts(radar = "chlem", date = "2023-03-10", source = "baltrad",
+#'   as_tibble = TRUE)
 #'
 get_vpts <- function(radar,
                      date,
                      source = c("baltrad", "uva", "ecog-04003"),
-                     as_vpts = TRUE) {
+                     as_tibble = FALSE) {
   # Check source argument
   ## Check if the source argument was provided, return error if not.
   if(missing(source) || is.null(source)) {
@@ -192,7 +182,7 @@ get_vpts <- function(radar,
   # Return the vpts data
   ## By default, return drop the source column and convert to a vpts object for
   ## usage in bioRAD
-  if (as_vpts) {
+  if (!as_tibble) {
 
     filtered_vpts_no_source <-
       purrr::map(filtered_vpts, \(df) dplyr::select(df, -source))

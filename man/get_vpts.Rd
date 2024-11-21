@@ -8,7 +8,7 @@ get_vpts(
   radar,
   date,
   source = c("baltrad", "uva", "ecog-04003"),
-  as_vpts = TRUE
+  as_tibble = FALSE
 )
 }
 \arguments{
@@ -19,8 +19,8 @@ get_vpts(
 \item{source}{The source of the data. One of baltrad, uva or ecog-04003. Only
 one source can be queried at a time. This is a required argument.}
 
-\item{as_vpts}{Logical. By default the data is returned as a
-\link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to FALSE, a data.frame will be
+\item{as_tibble}{Logical. By default the data is returned as a
+\link[bioRad:summary.vpts]{bioRad::summary.vpts} object. If set to TRUE, a \code{\link[dplyr:reexports]{dplyr::tibble()}} will be
 returned instead with an extra column for the radar source.}
 }
 \value{
@@ -69,6 +69,6 @@ get_vpts(radar = "bejab",
 get_vpts(radar = "chlem",
          date = "2023-03-10",
          source = "baltrad",
-         as_vpts = FALSE)
+         as_tibble = TRUE)
 \dontshow{\}) # examplesIf}
 }
