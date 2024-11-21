@@ -34,6 +34,27 @@ string_replace <- function(string, pattern, replacement) {
   sub(pattern, replacement, string, perl = TRUE)
 }
 
+#' Round a lubridate interval
+#'
+#' Extension of [lubridate::round_date()] to round an interval, by default by
+#' day. This means that of any given interval, the function will return the
+#' interval as a floor of the interval start, to the ceiling of the interal end.
+#'
+#' @inheritParams lubridate::round_date
+#'
+#' @return An interval starting with the floor of `x` and ending with the
+#'   ceiling of `x`, by the chosen unit.
+#' @noRd
+#'
+#' @examples
+#' round_interval(lubridate::interval("20230104 143204", "20240402 001206"))
+round_interval <- function(x, unit = "day"){
+  lubridate::interval(
+    lubridate::floor_date(lubridate::int_start(x), unit),
+    lubridate::ceiling_date(lubridate::int_end(x), unit)
+  )
+}
+
 #' Set the list names to the unique value of the radar column
 #'
 #'

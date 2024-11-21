@@ -126,11 +126,7 @@ get_vpts <- function(radar,
   }
 
   ## We need to round the interval because coverage only has daily resolution
-  rounded_interval <-
-    lubridate::interval(
-      lubridate::floor_date(lubridate::int_start(date_interval), "day"),
-      lubridate::ceiling_date(lubridate::int_end(date_interval), "day")
-    )
+  rounded_interval <- round_interval(date_interval, "day")
 
   # Discover what data is available for the requested radar and time interval
   coverage <- get_aloft_coverage()
