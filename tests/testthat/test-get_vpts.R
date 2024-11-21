@@ -398,7 +398,7 @@ test_that("get_vpts() returns an error for a bad radar", {
     get_vpts(radar = "aaaaa",
              date = "2023-01-01",
              source = "uva"),
-    class = "getRad_error_radar_not_in_aloft"
+    class = "getRad_error_radar_not_found"
   )
   # Radar is not a character vector
   expect_error(
