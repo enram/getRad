@@ -53,9 +53,9 @@ get_vpts_aloft <- function(radar_odim_code,
   ## We need to use the rounded interval because coverage only has daily
   ## resolution
   s3_paths <- dplyr::filter(coverage,
-                            .data$radar %in% radar_odim_code,
+                            .data$radar == radar_odim_code,
                             .data$date %within% rounded_interval,
-                            .data$source %in% selected_source) |>
+                            .data$source == selected_source) |>
     dplyr::pull(.data$directory) |>
     # Replace hdf5 with daily to fetch vpts files instead of hdf5 files
     string_replace("hdf5", "daily") |>
