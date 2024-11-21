@@ -28,8 +28,12 @@
 #' @noRd
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
-                           selected_source,
+                           source,
                            coverage = get_aloft_coverage()) {
+
+  # rename source argument for readability
+  selected_source <- source
+
   # Check that only one radar is provided (string of length 1)
   if(!rlang::is_string(radar_odim_code)) {
     cli::cli_abort(

@@ -162,7 +162,7 @@ get_vpts <- function(radar,
     ~get_vpts_aloft(
       .x,
       rounded_interval = rounded_interval,
-      selected_source = selected_sources,
+      source = selected_sources,
       coverage = coverage
     )
   ) |> radar_to_name()
