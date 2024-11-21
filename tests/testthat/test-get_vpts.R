@@ -1,3 +1,46 @@
+test_that("get_vpts() can return vpts data as a tibble or vpts object", {
+  skip_if_offline()
+  # Test that the function can return data as a vpts object
+  return_as_vpts_object <- get_vpts(radar = "depro",
+                                    date = "2016-03-05",
+                                    source = "uva",
+                                    as_tibble = FALSE)
+
+  expect_s3_class(
+    return_as_vpts_object,
+    "vpts"
+  )
+  expect_type(
+    return_as_vpts_object,
+    "list"
+  )
+
+  # Test that the function can return data as a tibble
+  expect_s3_class(
+    get_vpts(radar = "bejab",
+             date = "2023-01-01",
+             source = "baltrad",
+             .as_tibble = TRUE),
+    "data.frame"
+  )
+})
+
+test_that("get_vpts() returns a vpts object by default", {
+  skip_iff_offline()
+
+  return_as_vpts_object <- get_vpts(radar = "depro",
+                                    date = "2016-03-05",
+                                    source = "uva",
+                                    as_tibble = FALSE)
+
+  expect_identical(
+    return_as_vpts_object,
+    get_vpts(radar = "depro",
+             date = "2016-03-05",
+             source = "uva")
+  )
+})
+
 test_that("get_vpts() can fetch vpts data for a single radar and time", {
   skip_if_offline()
   single_radar_single_day <-
@@ -204,17 +247,6 @@ test_that("get_vpts() can return data as a vpts object compatible with getRad",{
                                     date = "2016-03-05",
                                     source = "uva",
                                     as_vpts = TRUE)
-
-
-
-  expect_s3_class(
-    return_as_vpts_object,
-    "vpts"
-  )
-  expect_type(
-    return_as_vpts_object,
-    "list"
-  )
 
   # Array of combinations that exposed bugs in the past
   expect_identical(
