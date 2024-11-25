@@ -23,7 +23,9 @@
 #' @importFrom lubridate %within%
 #'
 #' @examples
-#' get_vpts_aloft("ABC", "2022-01-01/2022-01-02", "source1", coverage_data)
+#' get_vpts_aloft("bejab",
+#'                lubridate::interval("20240305", "20240307"),
+#'                "baltrad")
 #'
 #' @noRd
 get_vpts_aloft <- function(radar_odim_code,
