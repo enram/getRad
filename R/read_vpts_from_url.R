@@ -12,7 +12,6 @@
 #' thus any fields sent to that function need to be parsed as character vectors.
 #'
 #' @param urls description
-#' @param ... Additional arguments to pass to [vroom::vroom]
 #'
 #' @return A list of tibbles, one for each url.
 #' @noRd
