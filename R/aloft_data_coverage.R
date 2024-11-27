@@ -1,6 +1,6 @@
-#' Fetch the coverage file from the aloft data repository
+#' Fetch the coverage table from the aloft data repository
 #'
-#' The coverage file provides an overview of what files are available on the
+#' The coverage table provides an overview of what files are available on the
 #' aloft data repository. Specifically it lists the directories that are
 #' available as well as the number of files in every directory.
 #'
