@@ -129,7 +129,7 @@ get_vpts <- function(radar,
   rounded_interval <- round_interval(date_interval, "day")
 
   # Discover what data is available for the requested radar and time interval
-  coverage <- get_aloft_coverage()
+  coverage <- aloft_data_coverage()
 
   # Check if the requested radars are present in the coverage
   found_radars <-

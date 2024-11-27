@@ -89,8 +89,8 @@ radar_to_name <- function(vpts_df_list) {
 #' @noRd
 #'
 #' @examplesIf interactive()
-#' get_aloft_coverage()
-get_aloft_coverage <- function() {
+#' aloft_data_coverage()
+aloft_data_coverage <- function() {
   # Discover what data is available for the requested radar and time interval
   coverage_url <- "https://aloftdata.s3-eu-west-1.amazonaws.com/coverage.csv"
   coverage <-

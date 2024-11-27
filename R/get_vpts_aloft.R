@@ -31,7 +31,7 @@
 get_vpts_aloft <- function(radar_odim_code,
                            rounded_interval,
                            source,
-                           coverage = get_aloft_coverage()) {
+                           coverage = aloft_data_coverage()) {
 
   # rename source argument for readability
   selected_source <- source

@@ -1,4 +1,4 @@
-coverage <- get_aloft_coverage()
+coverage <- aloft_data_coverage()
 
 test_that("get_vpts_aloft() returns error on invalid odim code", {
   # Radar is not 5 character string
