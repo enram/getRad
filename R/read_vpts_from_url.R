@@ -24,6 +24,12 @@
 #'  read_vpts_from_url()
 
 read_vpts_from_url <- function(urls) {
+
+  ## this could also be done by passing the vector of urls to readr::read_csv()
+  ## or vroom::vroom(), but both would be slower because they are not parallel
+  ## and wouldn't declare our custom user agent or allow us to set retry
+  ## criteria
+
   purrr::map(urls, httr2::request) |>
     # Identify ourselves in the request
     purrr::map(req_user_agent_getrad) |>
