@@ -93,11 +93,12 @@ get_vpts_aloft <- function(radar_odim_code,
   paste(aloft_data_url, s3_paths, sep = "/") |>
     read_vpts_from_url() |>
     # Add a column with the radar source to not lose this information
-    purrr::map2(s3_paths, ~dplyr::mutate(.x,
-                                         source = string_extract(.y,
-                                                                 ".+(?=\\/daily)")
-    )
-    ) |>
+    purrr::map2(s3_paths,
+                ~ dplyr::mutate(.x,
+                                source = string_extract(.y,
+                                                        ".+(?=\\/daily)")
+                                )
+                ) |>
     purrr::list_rbind() |>
     # Move the source column to the front, where it makes sense
     dplyr::relocate("source", .before = "radar") |>
