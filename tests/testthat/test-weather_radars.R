@@ -1,17 +1,17 @@
 test_that("weather_radars returns a tibble", {
-  weather_radar_metadata <- weather_radars()
+  skip_if_offline(host = "https://raw.githubusercontent.com")
 
   expect_s3_class(weather_radar_metadata, "tbl_df")
 })
 
 test_that("weather_radars returns non-empty tibble", {
-  weather_radar_metadata <- weather_radars()
+  skip_if_offline(host = "https://raw.githubusercontent.com")
 
   expect_true(nrow(weather_radar_metadata) > 0, "Expected non-empty tibble")
 })
 
 test_that("weather_radars returns a tibble with expected columns", {
-  weather_radar_metadata <- weather_radars()
+  skip_if_offline(host = "https://raw.githubusercontent.com")
 
   expect_named(
     weather_radar_metadata,
@@ -48,7 +48,7 @@ test_that("weather_radars returns a tibble with expected columns", {
 })
 
 test_that("weather_radars returns tibble with correct data types", {
-  weather_radar_metadata <- weather_radars()
+  skip_if_offline(host = "https://raw.githubusercontent.com")
 
   expect_identical(
     purrr::map(weather_radar_metadata, class),
