@@ -29,12 +29,15 @@ weather_radars <- function() {
       "OPERA_Database/OPERA_RADARS_ARH_DB.json"
     )
 
+  urls <- list(
+    c(url = radars_main_url, source = "main"),
+    c(url =    radars_archive_url, source = "archive")
+  )
+
   # Fetch the JSON file from eumetnet with similar arguments as the other
   # functions
-  urls <- list(radars_main_url, radars_archive_url)
-
   purrr::map(urls, \(json_urls) {
-    httr2::request(radars_main_url) |>
+    httr2::request(json_urls["url"]) |>
       req_user_agent_getrad() |>
       httr2::req_retry(
         max_tries = 15,
@@ -53,4 +56,10 @@ weather_radars <- function() {
       # Convert the columns to the correct types
       utils::type.convert(as.is = TRUE)
   })
+      dplyr::mutate(source = json_urls["source"])
+  }) |>
+    # Combine both sources into a single tibble
+    purrr::list_rbind() |>
+    # Convert the columns to the correct types
+    utils::type.convert(as.is = TRUE) |>
 }
