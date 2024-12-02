@@ -49,7 +49,6 @@ weather_radars <- function() {
       # The object is actually returned as text/plain
       httr2::resp_body_json(check_type = FALSE) |>
       # As tibble so it displays more nicely
-      # purrr::map(\(list) as.data.frame(list, stringsAsFactors = FALSE)) |>
       purrr::map(\(list) dplyr::as_tibble(list)) |>
       # Return as a single tibble by row binding
       purrr::list_rbind() |>
