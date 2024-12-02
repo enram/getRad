@@ -169,3 +169,43 @@ test_that("weather_radars() should return a source column", {
     c("main", "archive")
   )
 })
+
+test_that("weather_radars() doesn't return empty strings, but NA instead", {
+  skip_if_offline(host = "eumetnet.eu")
+
+  if (!exists("weather_radar_metadata")) {
+    weather_radar_metadata <- weather_radars()
+  }
+
+  ## Are there any empty strings in the tibble?
+  ### Character columns
+  expect_false(
+    weather_radar_metadata |>
+    dplyr::summarise(
+      dplyr::across(dplyr::where(is.character),
+                    \(x) any(x == "", na.rm = TRUE)
+                    )
+      ) |>
+    any()
+  )
+
+  ### Fail on the first character column that contains an empty string
+  weather_radar_metadata |>
+    dplyr::summarise(
+      dplyr::across(
+        dplyr::where(is.character),
+        \(x) any(x == "", na.rm = TRUE)
+      )
+    ) |>
+    purrr::walk(expect_false)
+
+
+  ### All columns
+  expect_false(
+    any(
+      sapply(weather_radar_metadata,
+             function(x) any(x == "", na.rm = TRUE))
+      )
+  )
+
+})
