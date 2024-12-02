@@ -65,5 +65,9 @@ weather_radars <- function() {
                                NA_character_,
                                string)
         )
-      )
+      ) |>
+    # Move source column to end
+    dplyr::relocate(source, .after = dplyr::last_col()) %>%
+    # Sort data for consistent git diffs
+    dplyr::arrange(country, number, startyear)
 }
