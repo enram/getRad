@@ -98,6 +98,11 @@ test_that("weather_radars returns tibble with correct data types", {
 
 test_that("weather_radars() should return a table with records from main and archive", {
   skip_if_offline(host = "eumetnet.eu")
+
+  if (!exists("weather_radar_metadata")) {
+    weather_radar_metadata <- weather_radars()
+  }
+
   ## Count the number of records in both main and archive source
   n_records_main <-
     paste(
@@ -141,7 +146,26 @@ test_that("weather_radars() should return a table with records from main and arc
 
   # Compare to output of weather_radars()
   expect_identical(
-    nrow(weather_radars()),
+    nrow(weather_radar_metadata),
     n_records_main + n_records_archive
+  )
+})
+
+test_that("weather_radars() should return a source column", {
+  skip_if_offline(host = "eumetnet.eu")
+
+  if (!exists("weather_radar_metadata")) {
+    weather_radar_metadata <- weather_radars()
+  }
+
+  ## Is the source column present?
+  expect_true(
+    "source" %in% names(weather_radar_metadata)
+  )
+
+  ## Does it contain only the values `main` and `archive`?
+  expect_in(
+    weather_radar_metadata$source,
+    c("main", "archive")
   )
 })
