@@ -58,4 +58,12 @@ weather_radars <- function() {
     purrr::list_rbind() |>
     # Convert the columns to the correct types
     utils::type.convert(as.is = TRUE) |>
+    # Convert empty strings into NA
+    dplyr::mutate(
+      dplyr::across(dplyr::where(is.character),
+      \(string) dplyr::if_else(string == "",
+                               NA_character_,
+                               string)
+        )
+      )
 }
