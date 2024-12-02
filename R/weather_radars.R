@@ -52,9 +52,6 @@ weather_radars <- function() {
       purrr::map(\(list) dplyr::as_tibble(list)) |>
       # Return as a single tibble by row binding
       purrr::list_rbind() |>
-      # Convert the columns to the correct types
-      utils::type.convert(as.is = TRUE)
-  })
       dplyr::mutate(source = json_urls["source"])
   }) |>
     # Combine both sources into a single tibble
