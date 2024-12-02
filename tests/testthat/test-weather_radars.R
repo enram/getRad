@@ -23,6 +23,7 @@ test_that("weather_radars returns a tibble with expected columns", {
   }
 
   expect_named(
+    ignore.order = FALSE,
     weather_radar_metadata,
     c(
       "number",
@@ -30,6 +31,7 @@ test_that("weather_radars returns a tibble with expected columns", {
       "countryid",
       "oldcountryid",
       "wmocode",
+      "wigosid",
       "odimcode",
       "location",
       "status",
@@ -42,16 +44,17 @@ test_that("weather_radars returns a tibble with expected columns", {
       "maxrange",
       "startyear",
       "heightantenna",
-      "frequency",
-      "finishyear",
-      "source",
       "diameterantenna",
       "beam",
       "gain",
+      "frequency",
+      "stratus",
+      "cirusnimbus",
       "wrwp",
+      "finishyear",
       "singlerrr",
       "compositerrr",
-      "wigosid"
+      "source"
     )
   )
 })
