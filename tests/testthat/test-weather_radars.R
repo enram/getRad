@@ -95,3 +95,53 @@ test_that("weather_radars returns tibble with correct data types", {
     )
   )
 })
+
+test_that("weather_radars() should return a table with records from main and archive", {
+  skip_if_offline(host = "eumetnet.eu")
+  ## Count the number of records in both main and archive source
+  n_records_main <-
+    paste(
+      sep = "/",
+      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "observations-programme/current-activities/opera/database",
+      "OPERA_Database/OPERA_RADARS_DB.json"
+    ) |>
+    httr2::request() |>
+    req_user_agent_getrad() |>
+    httr2::req_retry(
+      max_tries = 15,
+      backoff = \(x) sqrt(x) * 2,
+      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
+      retry_on_failure = TRUE
+    ) |>
+    httr2::req_perform() |>
+    # The object is actually returned as text/plain
+    httr2::resp_body_json(check_type = FALSE) |>
+    length()
+
+  n_records_archive <-
+    paste(
+      sep = "/",
+      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "observations-programme/current-activities/opera/database",
+      "OPERA_Database/OPERA_RADARS_ARH_DB.json"
+    ) |>
+    httr2::request() |>
+    req_user_agent_getrad() |>
+    httr2::req_retry(
+      max_tries = 15,
+      backoff = \(x) sqrt(x) * 2,
+      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
+      retry_on_failure = TRUE
+    ) |>
+    httr2::req_perform() |>
+    # The object is actually returned as text/plain
+    httr2::resp_body_json(check_type = FALSE) |>
+    length()
+
+  # Compare to output of weather_radars()
+  expect_identical(
+    nrow(weather_radars()),
+    n_records_main + n_records_archive
+  )
+})
