@@ -10,31 +10,47 @@
 #' @examplesIf interactive()
 #' weather_radars()
 weather_radars <- function() {
-  # Build the url where the JSON file is hosted on Github
-  opera_radar_overview_url <-
+  # Build the url where the JSON files are hosted on eumetnet
+
+  # Read source JSON files from OPERA
+  radars_main_url <-
     paste(
       sep = "/",
-      "https://raw.githubusercontent.com/enram",
-      "aloftdata.eu/refs/heads/main/_data",
-      "OPERA_RADARS_DB.json"
+      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "observations-programme/current-activities/opera/database",
+      "OPERA_Database/OPERA_RADARS_DB.json"
     )
 
-  # Fetch the JSON file from Github with similar arguments as the other
+  radars_archive_url <-
+    paste(
+      sep = "/",
+      "http://eumetnet.eu/wp-content/themes/aeron-child",
+      "observations-programme/current-activities/opera/database",
+      "OPERA_Database/OPERA_RADARS_ARH_DB.json"
+    )
+
+  # Fetch the JSON file from eumetnet with similar arguments as the other
   # functions
-  httr2::request(opera_radar_overview_url) |>
-    req_user_agent_getrad() |>
-    httr2::req_retry(
-      max_tries = 15, backoff = \(x) sqrt(x) * 2,
-      is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
-      retry_on_failure = TRUE
-    ) |>
-    httr2::req_perform() |>
-    # The object is actually returned as text/plain
-    httr2::resp_body_json(check_type = FALSE) |>
-    # As tibble so it displays more nicely
-    purrr::map(dplyr::as_tibble) |>
-    # Return as a single tibble by row binding
-    purrr::list_rbind() |>
-    # Convert the columns to the correct types
-    readr::type_convert()
+  urls <- list(radars_main_url, radars_archive_url)
+
+  purrr::map(urls, \(json_urls) {
+    httr2::request(radars_main_url) |>
+      req_user_agent_getrad() |>
+      httr2::req_retry(
+        max_tries = 15,
+        backoff = \(x) sqrt(x) * 2,
+        is_transient = \(resp) httr2::resp_status(resp) %in% c(429),
+        retry_on_failure = TRUE
+      ) |>
+      httr2::req_perform() |>
+      # The object is actually returned as text/plain
+      httr2::resp_body_json(check_type = FALSE) |>
+      # As tibble so it displays more nicely
+      # purrr::map(\(list) as.data.frame(list, stringsAsFactors = FALSE)) |>
+      purrr::map(\(list) dplyr::as_tibble(list)) |>
+      # Return as a single tibble by row binding
+      purrr::list_rbind() |>
+      # Convert the columns to the correct types
+      utils::type.convert(as.is = TRUE)
+  })
 }
