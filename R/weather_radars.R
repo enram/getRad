@@ -34,5 +34,7 @@ weather_radars <- function() {
     # As tibble so it displays more nicely
     purrr::map(dplyr::as_tibble) |>
     # Return as a single tibble by row binding
-    purrr::list_rbind()
+    purrr::list_rbind() |>
+    # Convert the columns to the correct types
+    readr::type_convert()
 }
