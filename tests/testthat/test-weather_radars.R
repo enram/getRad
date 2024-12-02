@@ -1,5 +1,5 @@
 test_that("weather_radars returns a tibble", {
-  skip_if_offline(host = "raw.githubusercontent.com")
+  skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- weather_radars()
   }
@@ -8,7 +8,7 @@ test_that("weather_radars returns a tibble", {
 })
 
 test_that("weather_radars returns non-empty tibble", {
-  skip_if_offline(host = "raw.githubusercontent.com")
+  skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- weather_radars()
   }
@@ -17,7 +17,7 @@ test_that("weather_radars returns non-empty tibble", {
 })
 
 test_that("weather_radars returns a tibble with expected columns", {
-  skip_if_offline(host = "raw.githubusercontent.com")
+  skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- weather_radars()
   }
@@ -57,7 +57,7 @@ test_that("weather_radars returns a tibble with expected columns", {
 })
 
 test_that("weather_radars returns tibble with correct data types", {
-  skip_if_offline(host = "raw.githubusercontent.com")
+  skip_if_offline(host = "eumetnet.eu")
   if (!exists("weather_radar_metadata")) {
     weather_radar_metadata <- weather_radars()
   }
