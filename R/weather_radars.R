@@ -36,8 +36,8 @@ weather_radars <- function() {
 
   # Fetch the JSON file from eumetnet with similar arguments as the other
   # functions
-  purrr::map(urls, \(json_urls) {
-    httr2::request(json_urls["url"]) |>
+  purrr::map(urls, \(json_url) {
+    httr2::request(json_url["url"]) |>
       req_user_agent_getrad() |>
       httr2::req_retry(
         max_tries = 15,
@@ -52,7 +52,7 @@ weather_radars <- function() {
       purrr::map(\(list) dplyr::as_tibble(list)) |>
       # Return as a single tibble by row binding
       purrr::list_rbind() |>
-      dplyr::mutate(source = json_urls["source"])
+      dplyr::mutate(source = json_url["source"])
   }) |>
     # Combine both sources into a single tibble
     purrr::list_rbind() |>
