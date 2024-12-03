@@ -22,8 +22,7 @@ Imports:
     glue,
     httr2 (>= 1.0.7),
     purrr,
-    rlang,
-    utils
+    rlang
 Suggests:
     askpass,
     htmltools,
