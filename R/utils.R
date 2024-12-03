@@ -8,6 +8,9 @@
 #'
 #' @return An integer vector
 #' @seealso [as_numeric_shh()] [as_logical_shh()]
+#'
+#' @noRd
+#'
 #' @examples
 #' as_integer_shh(c("1", "2", "3"))
 as_integer_shh <- function(x){
@@ -26,6 +29,9 @@ as_integer_shh <- function(x){
 #'
 #' @return A logical vector
 #' @seealso [as_numeric_shh()] [as_integer_shh()]
+#'
+#' @noRd
+#'
 #' @examples
 #' as_logical_shh(c("TRUE", "FALSE", "TRUE"))
 as_logical_shh <- function(x){
@@ -44,6 +50,9 @@ as_logical_shh <- function(x){
 #'
 #' @return A numeric vector
 #' @seealso [as_integer_shh()] [as_logical_shh()]
+#'
+#' @noRd
+#'
 #' @examples
 #' as_double_shh(c("1.1", "2.2", "3.3"))
 as_numeric_shh <- function(x){
