@@ -22,6 +22,13 @@ test_that("weather_radars returns a tibble with expected columns", {
     weather_radar_metadata <- weather_radars()
   }
 
+  ## Right number of columns
+  expect_length(
+    weather_radar_metadata,
+    29
+  )
+
+  ## Right columns, in a certain order
   expect_named(
     ignore.order = FALSE,
     weather_radar_metadata,
