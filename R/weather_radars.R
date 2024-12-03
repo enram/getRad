@@ -76,12 +76,7 @@ weather_radars <- function() {
       latitude = as_numeric_shh(.data$latitude),
       longitude = as_numeric_shh(.data$longitude),
       heightofstation = as_integer_shh(.data$heightofstation),
-      doppler = dplyr::case_when(
-        .data$doppler == "Y" ~ TRUE,
-        .data$doppler == "N" ~ FALSE,
-        .default = NA,
-        .ptype = logical()
-      ),
+      doppler = yes_no_as_logical(.data$doppler),
       maxrange = as_integer_shh(.data$maxrange),
       startyear = as_integer_shh(.data$startyear),,
       heightantenna = as_numeric_shh(.data$heightantenna),
@@ -89,25 +84,10 @@ weather_radars <- function() {
       beam = as_numeric_shh(.data$beam),
       gain = as_numeric_shh(.data$gain),
       frequency = as_numeric_shh(.data$frequency),
-      wrwp = dplyr::case_when(
-        .data$wrwp == "Y" ~ TRUE,
-        .data$wrwp == "N" ~ FALSE,
-        .default = NA,
-        .ptype = logical()
-      ),
+      wrwp = yes_no_as_logical(.data$wrwp),
       finishyear = as_integer_shh(.data$finishyear),
-      singlerrr = dplyr::case_when(
-        .data$singlerrr == "Y" ~ TRUE,
-        .data$singlerrr == "N" ~ FALSE,
-        .default = NA,
-        .ptype = logical()
-      ),
-      compositerrr = dplyr::case_when(
-        .data$compositerrr == "Y" ~ TRUE,
-        .data$compositerrr == "N" ~ FALSE,
-        .default = NA,
-        .ptype = logical()
-      )
+      singlerrr = yes_no_as_logical(.data$singlerrr),
+      compositerrr = yes_no_as_logical(.data$compositerrr)
     ) |>
     # Sort data for consistent git diffs
     dplyr::arrange(.data$country, .data$number, .data$startyear)

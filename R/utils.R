@@ -20,12 +20,10 @@ as_integer_shh <- function(x){
   suppressWarnings(as.integer(x))
 }
 
-#' Convert a character vector to logical, but do not warn.
+#' Convert a character vector containing `Ỳ`, `N` and `NA` to a logical vector.
 #'
-#' This function does not perform coercion, but conversion. For coercion see
-#' [vctrs::vec_cast()](https://vctrs.r-lib.org/reference/vec_cast.html).
-#'
-#' @param x A character vector
+#' @param x A character vector only containing `Y`, `N` and `NA`. Any other
+#'   values will be silenty converted to `NA`.
 #'
 #' @return A logical vector
 #' @seealso [as_numeric_shh()] [as_integer_shh()]
@@ -33,12 +31,24 @@ as_integer_shh <- function(x){
 #' @noRd
 #'
 #' @examples
-#' as_logical_shh(c("TRUE", "FALSE", "TRUE"))
-as_logical_shh <- function(x){
-  if(!is.character(x)){
+#' yes_no_as_logical(c("Y", "N", NA, NA, "Y"))
+#' yes_no_as_logical(c("Y", "foo", "bar", "N", NA))
+yes_no_as_logical <- function(x) {
+  # x needs to be a character vector
+  if (!is.character(x)) {
     cli::cli_abort("x must be a character vector")
   }
-  suppressWarnings(as.logical(x))
+
+  # Convert `Y` to TRUE, `N` to FALSE and `NA` to NA
+  converted_vector <-
+    dplyr::case_when(
+      x == "Y" ~ TRUE,
+      x == "N" ~ FALSE,
+      .default = NA,
+      .ptype = logical()
+    )
+
+  return(converted_vector)
 }
 
 #' Convert a character vector to numeric, but do not warn.
