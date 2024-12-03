@@ -5,6 +5,7 @@
 #' The retrieved data is returned as a tibble.
 #'
 #' @return A tibble containing weather radar metadata
+#' @importFrom dplyr .data
 #' @export
 #'
 #' @examplesIf interactive()
@@ -69,45 +70,45 @@ weather_radars <- function() {
     # convert column types to expected values, non fitting values are returned
     # as NA without warning
     dplyr::mutate(
-      number = as_integer_shh(number),
-      wmocode = as_integer_shh(wmocode),
-      status = as_integer_shh(status),
-      latitude = as_numeric_shh(latitude),
-      longitude = as_numeric_shh(longitude),
-      heightofstation = as_integer_shh(heightofstation),
+      number = as_integer_shh(.data$number),
+      wmocode = as_integer_shh(.data$wmocode),
+      status = as_integer_shh(.data$status),
+      latitude = as_numeric_shh(.data$latitude),
+      longitude = as_numeric_shh(.data$longitude),
+      heightofstation = as_integer_shh(.data$heightofstation),
       doppler = dplyr::case_when(
-        doppler == "Y" ~ TRUE,
-        doppler == "N" ~ FALSE,
+        .data$doppler == "Y" ~ TRUE,
+        .data$doppler == "N" ~ FALSE,
         .default = NA,
         .ptype = logical()
       ),
-      maxrange = as_integer_shh(maxrange),
-      startyear = as_integer_shh(startyear),,
-      heightantenna = as_numeric_shh(heightantenna),
-      diameterantenna = as_numeric_shh(diameterantenna),
-      beam = as_numeric_shh(beam),
-      gain = as_numeric_shh(gain),
-      frequency = as_numeric_shh(frequency),
+      maxrange = as_integer_shh(.data$maxrange),
+      startyear = as_integer_shh(.data$startyear),,
+      heightantenna = as_numeric_shh(.data$heightantenna),
+      diameterantenna = as_numeric_shh(.data$diameterantenna),
+      beam = as_numeric_shh(.data$beam),
+      gain = as_numeric_shh(.data$gain),
+      frequency = as_numeric_shh(.data$frequency),
       wrwp = dplyr::case_when(
-        wrwp == "Y" ~ TRUE,
-        wrwp == "N" ~ FALSE,
+        .data$wrwp == "Y" ~ TRUE,
+        .data$wrwp == "N" ~ FALSE,
         .default = NA,
         .ptype = logical()
       ),
-      finishyear = as_integer_shh(finishyear),
+      finishyear = as_integer_shh(.data$finishyear),
       singlerrr = dplyr::case_when(
-        singlerrr == "Y" ~ TRUE,
-        singlerrr == "N" ~ FALSE,
+        .data$singlerrr == "Y" ~ TRUE,
+        .data$singlerrr == "N" ~ FALSE,
         .default = NA,
         .ptype = logical()
       ),
       compositerrr = dplyr::case_when(
-        compositerrr == "Y" ~ TRUE,
-        compositerrr == "N" ~ FALSE,
+        .data$compositerrr == "Y" ~ TRUE,
+        .data$compositerrr == "N" ~ FALSE,
         .default = NA,
         .ptype = logical()
       )
     ) |>
     # Sort data for consistent git diffs
-    dplyr::arrange(country, number, startyear)
+    dplyr::arrange(.data$country, .data$number, .data$startyear)
 }
