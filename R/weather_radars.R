@@ -56,8 +56,6 @@ weather_radars <- function() {
   }) |>
     # Combine both sources into a single tibble
     purrr::list_rbind() |>
-    # Convert the columns to the correct types
-    utils::type.convert(as.is = TRUE) |>
     # Convert empty strings into NA
     dplyr::mutate(
       dplyr::across(dplyr::where(is.character),
@@ -67,7 +65,49 @@ weather_radars <- function() {
         )
       ) |>
     # Move source column to end
-    dplyr::relocate(source, .after = dplyr::last_col()) %>%
+    dplyr::relocate(source, .after = dplyr::last_col()) |>
+    # convert column types to expected values, non fitting values are returned
+    # as NA without warning
+    dplyr::mutate(
+      number = as_integer_shh(number),
+      wmocode = as_integer_shh(wmocode),
+      status = as_integer_shh(status),
+      latitude = as_numeric_shh(latitude),
+      longitude = as_numeric_shh(longitude),
+      heightofstation = as_integer_shh(heightofstation),
+      doppler = dplyr::case_when(
+        doppler == "Y" ~ TRUE,
+        doppler == "N" ~ FALSE,
+        .default = NA,
+        .ptype = logical()
+      ),
+      maxrange = as_integer_shh(maxrange),
+      startyear = as_integer_shh(startyear),,
+      heightantenna = as_numeric_shh(heightantenna),
+      diameterantenna = as_numeric_shh(diameterantenna),
+      beam = as_numeric_shh(beam),
+      gain = as_numeric_shh(gain),
+      frequency = as_numeric_shh(frequency),
+      wrwp = dplyr::case_when(
+        wrwp == "Y" ~ TRUE,
+        wrwp == "N" ~ FALSE,
+        .default = NA,
+        .ptype = logical()
+      ),
+      finishyear = as_integer_shh(finishyear),
+      singlerrr = dplyr::case_when(
+        singlerrr == "Y" ~ TRUE,
+        singlerrr == "N" ~ FALSE,
+        .default = NA,
+        .ptype = logical()
+      ),
+      compositerrr = dplyr::case_when(
+        compositerrr == "Y" ~ TRUE,
+        compositerrr == "N" ~ FALSE,
+        .default = NA,
+        .ptype = logical()
+      )
+    ) |>
     # Sort data for consistent git diffs
     dplyr::arrange(country, number, startyear)
 }
