@@ -4,9 +4,9 @@
   "identifier": "getRad",
   "description": "What the package does (one paragraph).",
   "name": "getRad: Access and Standardize Radar Data",
-  "relatedLink": "https://enram.github.io/getRad/",
-  "codeRepository": "https://github.com/enram/getRad",
-  "issueTracker": "https://github.com/enram/getRad/issues",
+  "relatedLink": "https://aloftdata.github.io/getRad/",
+  "codeRepository": "https://github.com/aloftdata/getRad",
+  "issueTracker": "https://github.com/aloftdata/getRad/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "0.0.0.9000",
   "programmingLanguage": {
@@ -59,6 +59,6 @@
     "SystemRequirements": null
   },
   "fileSize": "2.744KB",
-  "readme": "https://github.com/enram/getRad/blob/main/README.md",
-  "contIntegration": ["https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml", "https://github.com/enram/getRad/actions/workflows/test-coverage.yaml"]
+  "readme": "https://github.com/aloftdata/getRad/blob/main/README.md",
+  "contIntegration": ["https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml", "https://github.com/aloftdata/getRad/actions/workflows/test-coverage.yaml"]
 }

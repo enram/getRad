@@ -7,8 +7,8 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/getRad)](https://CRAN.R-project.org/package=getRad)
-[![R-CMD-check](https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/enram/getRad/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/enram/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/enram/getRad/)
+[![R-CMD-check](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aloftdata/getRad/actions/workflows/R-CMD-check.yaml)
+[![codecov](https://codecov.io/gh/aloftdata/getRad/branch/main/graph/badge.svg)](https://app.codecov.io/gh/aloftdata/getRad/)
 [![repo
 status](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
@@ -27,7 +27,7 @@ You can install the development version of `getRad` from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("enram/getRad")
+devtools::install_github("aloftdata/getRad")
 ```
 
 For the time being the package is not yet released on CRAN.
@@ -65,12 +65,12 @@ plot(calculate_vp(pvol, h_layer = 50, n_layer = 40))
 ## Meta
 
 - We welcome
-  [contributions](https://enram.github.io/getRad/CONTRIBUTING.html)
+  [contributions](https://aloftdata.github.io/getRad/CONTRIBUTING.html)
   including bug reports.
 - License: MIT
 - Get [citation
-  information](https://enram.github.io/getRad/authors.html#citation) for
+  information](https://aloftdata.github.io/getRad/authors.html#citation) for
   getRad in R doing `citation("getRad")`.
 - Please note that this project is released with a [Contributor Code of
-  Conduct](https://enram.github.io/getRad/CODE_OF_CONDUCT.html). By
+  Conduct](https://aloftdata.github.io/getRad/CODE_OF_CONDUCT.html). By
   participating in this project you agree to abide by its terms.
