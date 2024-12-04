@@ -11,8 +11,6 @@ Description: This package facilitates downloading radar data for
     biological research. Currently the main functionality is downloading
     polar volume data from open repositories of European countries.
 License: MIT + file LICENSE
-URL: https://github.com/enram/getRad, https://enram.github.io/getRad/
-BugReports: https://github.com/enram/getRad/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 
@@ -23,6 +21,8 @@ Imports:
     httr2,
     purrr,
     rlang
+URL: https://github.com/aloftdata/getRad, https://aloftdata.github.io/getRad/
+BugReports: https://github.com/aloftdata/getRad/issues
 Suggests:
     askpass,
     htmltools,
