@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   supported_countries: supported_countries.html
-last_built: 2024-11-18T08:30Z
+last_built: 2024-12-04T09:56Z
 urls:
-  reference: https://enram.github.io/getRad/reference
-  article: https://enram.github.io/getRad/articles
+  reference: https://aloftdata.github.io/getRad/reference
+  article: https://aloftdata.github.io/getRad/articles
