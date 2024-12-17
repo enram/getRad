@@ -76,6 +76,7 @@ radar_to_name <- function(vpts_df_list) {
       \(df) unique(dplyr::pull(df, .data$radar))
     )
   )
+}
 #' Convert a character vector to integer, but do not warn.
 #'
 #' This function does not perform coercion, but conversion. For coercion see

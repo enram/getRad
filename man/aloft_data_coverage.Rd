@@ -2,7 +2,7 @@
 % Please edit documentation in R/aloft_data_coverage.R
 \name{aloft_data_coverage}
 \alias{aloft_data_coverage}
-\title{Fetch the coverage file from the aloft data repository}
+\title{Fetch the coverage table from the aloft data repository}
 \usage{
 aloft_data_coverage()
 }
@@ -10,7 +10,7 @@ aloft_data_coverage()
 A data.frame of the coverage file on the aloft data repository
 }
 \description{
-The coverage file provides an overview of what files are available on the
+The coverage table provides an overview of what files are available on the
 aloft data repository. Specifically it lists the directories that are
 available as well as the number of files in every directory.
 }
