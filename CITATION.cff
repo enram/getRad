@@ -21,8 +21,8 @@ authors:
   email: peter.desmet@inbo.be
   orcid: https://orcid.org/0000-0002-8442-8025
   affiliation: Research Institute for Nature and Forest (INBO)
-repository-code: https://github.com/enram/getRad
-url: https://enram.github.io/getRad/
+repository-code: https://github.com/aloftdata/getRad
+url: https://aloftdata.github.io/getRad/
 contact:
 - family-names: Kranstauber
   given-names: Bart

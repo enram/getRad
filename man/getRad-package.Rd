@@ -11,9 +11,9 @@ This package facilitates downloading radar data for biological research. Current
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/enram/getRad}
-  \item \url{https://enram.github.io/getRad/}
-  \item Report bugs at \url{https://github.com/enram/getRad/issues}
+  \item \url{https://github.com/aloftdata/getRad}
+  \item \url{https://aloftdata.github.io/getRad/}
+  \item Report bugs at \url{https://github.com/aloftdata/getRad/issues}
 }
 
 }
